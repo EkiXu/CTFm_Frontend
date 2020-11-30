@@ -1,0 +1,179 @@
+<template>
+  <div class="register">
+    <vue-particles
+      color="#dedede"
+      :particle-opacity="0.8"
+      :particles-number="50"
+      shape-type="circle"
+      :particle-size="12"
+      lines-color="#dedede"
+      :lines-width="1"
+      :line-linked="true"
+      :line-opacity="0.4"
+      :lines-distance="150"
+      :move-speed="2"
+      :hover-effect="true"
+      hover-mode="grab"
+      :click-effect="false"
+    />
+    <v-container
+      class="fill-height warpper"
+      fluid
+    >
+      <v-row
+        align="center"
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          sm="8"
+          md="4"
+        >
+          <v-card class="elevation-12">
+            <v-toolbar
+              color="primary"
+              dark
+              flat
+            >
+              <v-toolbar-title>Register</v-toolbar-title>
+            </v-toolbar>
+            <v-card-text>
+              <v-form
+                ref="registerForm"
+                v-model="valid"
+              >
+                <v-text-field
+                  v-model="registerForm.email"
+                  :rules="rules.emailRules"
+                  label="Email"
+                  name="login"
+                  prepend-icon="mdi-email"
+                  type="text"
+                />
+                <v-text-field
+                  v-model="registerForm.username"
+                  :rules="rules.usernameRules"
+                  label="Username"
+                  name="login"
+                  prepend-icon="mdi-account"
+                  type="text"
+                />
+                <v-text-field
+                  v-model="registerForm.nickname"
+                  :rules="rules.nicknameRules"
+                  label="Nickname"
+                  name="login"
+                  prepend-icon="mdi-account-outline"
+                  type="text"
+                />
+                <v-text-field
+                  id="password"
+                  label="Password"
+                  name="password"
+                  prepend-icon="mdi-lock"
+                  type="password"
+                  v-model="registerForm.password"
+                  :rules="rules.passwordRules"
+                />
+                <v-text-field
+                  id="rePassword"
+                  label="RePassword"
+                  name="rePassword"
+                  prepend-icon="mdi-lock-outline"
+                  type="password"
+                  v-model="registerForm.rePassword"
+                  :rules="rules.rePasswordRules"
+                />
+              </v-form>
+              <!--<v-alert type="success">I'm a success alert.</v-alert>-->
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                @click="submitForm"
+                color="primary"
+              >
+                Register
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+</template>
+
+<script>
+import { mapActions } from 'vuex'
+import { registerAPI } from '@/api/auth'
+export default {
+  name: 'Register',
+  data () {
+    return {
+      isWaiting: false,
+      registerForm: {
+        email: '',
+        username: '',
+        nickname: '',
+        password: '',
+        rePassword: ''
+      },
+      valid: true,
+      errorMsg: '',
+      rules: {
+        emailRules: [
+          v => !!v || 'E-mail is required',
+          v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+        ],
+        usernameRules: [
+          v => !!v || 'Username is required',
+          v => (v && v.length >= 3) || 'name must be more than 4 characters',
+          v => (v && v.length <= 16) || 'name must be less than 16 characters',
+          v => /^[a-zA-Z0-9_-]{3,16}$/.test(v) ||  'Username must be valid'
+        ],
+        nicknameRules: [
+          v => !!v || 'NickName is required',
+          v => (v && v.length >= 3) || 'name must be more than 4 characters',
+          v => (v && v.length <= 16) || 'name must be less than 16 characters',
+          v => /^[a-zA-Z0-9_-]{3,16}$/.test(v) ||  'Nickname must be valid'
+        ],
+        passwordRules: [
+          v => !!v || 'Password is required',
+          v => (v && v.length >= 8) || 'Password must be more than 8 characters'
+        ],
+        rePasswordRules: [
+          v => !!v || 'RePassword is required',
+          v =>
+            (v && v.length >= 8) || 'Password must be more than 8 characters',
+          v =>
+            (!!v && v) === this.registerForm.password ||
+            'Password must be match with RePassword'
+        ]
+      }
+    }
+  },
+  methods: {
+    ...mapActions('user', ['LoginIn']),
+    async submitForm () {
+      if (this.$refs.registerForm.validate()) {
+        const res = await registerAPI(this.registerForm)
+        if (res.code === 0) {
+          console.log('Success')
+          this.$router.push({ name: 'login' })
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.warpper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  display: flex;
+}
+</style>

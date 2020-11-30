@@ -1,0 +1,179 @@
+<template>
+  <v-col
+    cols="12"
+    sm="6"
+    md="7"
+    class="task_panel"
+    style="padding:0px"
+  >
+    <div class="task_page">
+      <div class="task_content">
+        <h3
+          class="task_title"
+          v-text="challenge.title"
+        />
+        <p class="content_author">
+          Author: <a target="_blank"><strong v-text="challenge.author"></strong></a>
+        </p>
+        <div class="content_description">
+          <vue-markdown
+            style="overflow-wrap: break-word;"
+            :source="challenge.content"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="task_action">
+      <div class="action_header">
+        <i
+          class="mdi mdi-console"
+          style="margin-right: 10px;"
+        />submission console
+      </div>
+      <div class="action_form">
+        <div style="padding: 20px 15px;">
+          <div
+            class="records"
+            ref="records"
+          >
+            <vue-typed-js
+              v-for="(record,index) in submitRecords"
+              :key="index"
+              :strings="record"
+              :show-cursor="false"
+            >
+              <p
+                class="typing"
+                style="margin:0px;"
+              />
+            </vue-typed-js>
+          </div>
+          <input
+            type="text"
+            placeholder="flag{...}"
+            class="flag_input"
+            v-model="challenge.flag"
+            @keyup.enter="submitFlag"
+          >
+        </div>
+      </div>
+    </div>
+  </v-col>
+</template>
+
+<script>
+import {getChallengeByIDAPI,checkChallengeFlagByIDAPI } from '@/api/challenge'
+export default {
+  name: 'Challenge',
+  data () {
+    return {
+      showCur: true,
+      submitRecords: [['> Paste flag in the input below and press enter.']],
+      challenge:{
+        name: '',
+        author: '',
+        content:'',
+        id:0,
+        points:0,
+        category:''
+      }
+    }
+  },
+  methods: {
+    async getInfo(){
+      const res = await getChallengeByIDAPI(this.$route.params.id)
+      this.challenge = res.data
+    },
+    async submitFlag(){
+      let data = {flag:this.challenge.flag}
+      //this.submitRecords.push(['> The provided flg does not seem to be valid :('])
+      try{
+        const res = await checkChallengeFlagByIDAPI(data,this.$route.params.id)
+        this.submitRecords.push(['> ✓ I am most impressed by your efforts. You solved the task'])
+      } catch(error) {
+        console.log(error)
+        this.submitRecords.push([`> ✗ ${error.message}`])
+        //this.submitRecords.push(['> ✗ Nope.'])
+      }
+    }
+  },
+  watch:{
+    $route(to,from){
+      this.getInfo()
+    },
+    submitRecords(val){
+        this.$nextTick(() => {
+          var records = this.$refs.records
+          records.scrollTop = records.scrollHeight
+        })
+    }
+  },
+  created(){
+    this.getInfo()
+  }
+}
+</script>
+
+<style lang="scss" >
+.task_panel{
+  display: flex;
+  flex-direction: column;
+  background-color: #253D4D;
+  box-sizing:border-box;
+  .task_page{
+    height: calc(100% - 210px);
+    overflow: hidden;
+    .task_content{
+      padding: 3.0em;
+      height: 100%;
+      overflow: auto;
+      .task_title{
+        font-size:48px;
+      }
+    }
+  }
+  .task_action{
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0px -2px 40px #00000033;
+    transition: height 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    flex-direction: column;
+    background-color: #1A1B1C;
+    height: 240px;
+    bottom: 0;
+    .action_header{
+      width: 100%;
+      color: #0AEECC;
+      height: 34px;
+      display: flex;
+      box-sizing: border-box;
+      align-items: center;
+      padding-left: 15px;
+      background-color: #132B39;
+    }
+    .records{
+      margin-bottom: 15px;
+      max-height: 48px;
+      overflow: auto;
+    }
+    .typing{
+      font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace;
+      font-weight: 400;
+    }
+    .flag_input{
+      width: 100%;
+      height: 100%;
+      color: white;
+      height: 45px;
+      outline: none;
+      padding: 10px;
+      font-size: 16px;
+      box-shadow: 0px 4px 20px #00000055;
+      box-sizing: border-box;
+      border-style: none;
+      border-radius: 5px;
+      background-color: #132B39;
+    }
+  }
+}
+</style>
