@@ -97,8 +97,12 @@ service.interceptors.response.use(
     if (error.response.status == 401) {
       error.message = '未登录'
       Vue.$vToastify.error(`错误: ${error.message}`)
-    }else if (error && error.response) {
+    }else if(error.response,status ==500 ){
+      Vue.$vToastify.error(`服务器错误: ${error.message}`)
+    }else if (error && error.response && error.response.data.detail) {
       error.message = error.response.data.detail
+    }else if (error && error.response) {
+      error.message = error.response.data
     }
     if (error.toString().includes('timeout')) {
       error.message = '抱歉，服务器超时，请稍后再试！'

@@ -127,10 +127,7 @@ export default {
       this.isWaiting = true
       if (this.$refs.loginForm.validate()) {
         const res = this.ObtainToken(this.loginForm)
-        res.then(code => {
-          console.log(code)
-        })
-          .catch(error => {
+        res.catch(error => {
             this.valid = false
             this.errorMsg = error
           })

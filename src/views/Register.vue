@@ -154,13 +154,22 @@ export default {
   },
   methods: {
     ...mapActions('user', ['LoginIn']),
-    async submitForm () {
+    submitForm () {
       if (this.$refs.registerForm.validate()) {
-        const res = await registerAPI(this.registerForm)
-        if (res.code === 0) {
-          console.log('Success')
+        const res = registerAPI(this.registerForm)
+        res.then(() => {
+          this.$vToastify.success("Register Successfully!")
           this.$router.push({ name: 'login' })
-        }
+        }).catch(error => {
+          this.valid = false
+          const data = error.response.data
+          var message
+          for (var key in data){
+            message = data[key][0];
+          }
+          this.$vToastify.error(message)
+          return
+        })
       }
     }
   }

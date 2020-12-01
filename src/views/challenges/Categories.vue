@@ -12,9 +12,9 @@
         <CategoryCard
           :icon="category.icon"
           :title="category.name"
-          :total="category.total"
-          :last-update="category.last_update"
-          :herf="'/category/'+category.type"
+          :total="category.challenge_amount"
+          :last-update="category.updated_at"
+          :herf="'/category/'+category.name.toLowerCase()"
         />
       </v-col>
     </v-row>
@@ -22,57 +22,28 @@
 </template>
 
 <script>
+import moment from 'moment'
 import CategoryCard from '@/components/CategoryCard.vue'
-import {getCategoryList} from '@/api/challenge'
+import {getCategoryListAPI} from '@/api/challenge'
 export default {
   components: {
     CategoryCard
   },
   data () {
     return {
-      categories: [
-        {
-          type: 'web',
-          name: 'Web',
-          icon: 'mdi-web',
-          solved: 1,
-          total: 233,
-          last_update: 'Last 24 Hours'
-        },
-        {
-          type: 'pwn',
-          name: 'PWN',
-          icon: 'mdi-code-greater-than',
-          solved: 1,
-          total: 233,
-          last_update: 'Last 24 Hours'
-        },
-        {
-          type: 're',
-          name: 'RE',
-          icon: 'mdi-code-json',
-          solved: 1,
-          total: 233,
-          last_update: 'Last 24 Hours'
-        },
-        {
-          type: 'crypto',
-          name: 'Crypto',
-          icon: 'mdi-lock',
-          solved: 1,
-          total: 233,
-          last_update: 'Last 24 Hours'
-        },
-        {
-          type: 'misc',
-          name: 'MISC',
-          icon: 'mdi-atom',
-          solved: 1,
-          total: 233,
-          last_update: 'Last 24 Hours'
-        }
-      ]
+      categories: []
     }
+  },
+  methods:{
+    async genCategoryList(){
+      const res = await getCategoryListAPI()
+      this.categories = res.data
+      for(let i=0 ;i< this.categories.length ;i++){
+        this.categories[i].updated_at = moment(this.categories[i].updated_at,'YYYY-MM-DD HH:mm:ss').fromNow()
+      }
+    }
+  },created(){
+    this.genCategoryList()
   }
 }
 </script>
