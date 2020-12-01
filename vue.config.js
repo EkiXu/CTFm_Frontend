@@ -11,7 +11,7 @@ module.exports = {
     'vuetify'
   ],
   publicPath: '/',
-  outputDir: '../dist',
+  outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: false,
   productionSourceMap: false,
