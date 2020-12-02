@@ -7,6 +7,7 @@ import './plugins/chartist'
 import './plugins/typed'
 import './plugins/particles'
 import './plugins/markdown'
+import './plugins/vueToastify'
 
 Vue.config.productionTip = false
 

@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
-import VueToastify from "vue-toastify";
+
 
 // import colors from 'vuetify/lib/util/colors'
 
 
 Vue.use(Vuetify)
-Vue.use(VueToastify);
+
 
 
 export default new Vuetify({

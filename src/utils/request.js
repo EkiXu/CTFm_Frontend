@@ -4,6 +4,8 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Vue from 'vue'
 import jwt_decode from 'jwt-decode'
+import router from '../router'
+
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -17,7 +19,7 @@ function directLogin() {
   router.push({
       path: '/login',
       query: {
-          redirectUrl: window.location.href.split('#')[1] || ''
+        redirect: router.currentRoute.fullPath
       }
   })
 }
@@ -59,6 +61,7 @@ service.interceptors.request.use(
         }
     } else {
       directLogin()
+      Vue.$vToastify.error('Please Login First')
     }
     return config
   },
@@ -93,17 +96,19 @@ service.interceptors.response.use(
   },
   error => {
     NProgress.done()
-    //console.log(error.response)
-    if (error.response.status == 401) {
-      error.message = '未登录'
-      Vue.$vToastify.error(`错误: ${error.message}`)
-    }else if(error.response,status ==500 ){
-      Vue.$vToastify.error(`服务器错误: ${error.message}`)
-    }else if (error && error.response && error.response.data.detail) {
-      error.message = error.response.data.detail
-    }else if (error && error.response) {
+    console.log(error)
+    if(error && error.response){
+      if (error.response.status == 401 || error.response.status == 403) {
+        error.message = '未登录'
+        directLogin()
+        Vue.$vToastify.error(`错误: ${error.message}`)
+      }else if(error.response.status ==500 ){
+        Vue.$vToastify.error(`服务器错误: ${error.message}`)
+      }else if (error.response.data.detail) {
+        error.message = error.response.data.detail
+      }
       error.message = error.response.data
-    }
+    } 
     if (error.toString().includes('timeout')) {
       error.message = '抱歉，服务器超时，请稍后再试！'
       Vue.$vToastify.error(`错误: ${error.message}`)
