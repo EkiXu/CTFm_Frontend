@@ -9,7 +9,15 @@ export const getUserListAPI = () => {
   
 export const getUserDetailByIDAPI = (id) => {
   return service({
-    url: '/user/'+id,
+    url: '/user/'+id+'/',
     method: 'get',
+  })
+}
+
+export const updateUserDetailByIDAPI = (id,data) => {
+  return service({
+    url: '/user/'+id+'/',
+    method: 'put',
+    data:data
   })
 }
