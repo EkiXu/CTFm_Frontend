@@ -162,12 +162,7 @@ export default {
           this.$router.push({ name: 'login' })
         }).catch(error => {
           this.valid = false
-          const data = error.response.data
-          var message
-          for (var key in data){
-            message = data[key][0];
-          }
-          this.$vToastify.error(message)
+          this.$vToastify.error(error.message)
           return
         })
       }

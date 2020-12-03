@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { mapGetters} from 'vuex'
+import { mapGetters,mapActions} from 'vuex'
 import BaseCard from '@/components/BaseCard.vue'
 import {getUserDetailByIDAPI,updateUserDetailByIDAPI} from '@/api/user'
 export default {
@@ -138,6 +138,7 @@ export default {
     ...mapGetters('user', ['userInfo']) 
   },
   methods:{
+    ...mapActions('user', ['UpdateUserInfo']),
     async genUserInfo(){
       let res = await getUserDetailByIDAPI(this.userInfo.id)
       this.userProfile = res.data
@@ -147,6 +148,7 @@ export default {
         const res = updateUserDetailByIDAPI(this.userInfo.id,this.userProfile)
         res.then(() => {
           this.$vToastify.success("Profile Update Successfully!")
+          this.UpdateUserInfo({id:this.userInfo.id,nickname:this.userProfile.nickname,username:this.userProfile.username})
         }).catch(error => {
           this.valid = false
           const data = error.response.data

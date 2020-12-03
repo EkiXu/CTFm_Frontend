@@ -129,7 +129,7 @@ export default {
         const res = this.ObtainToken(this.loginForm)
         res.catch(error => {
             this.valid = false
-            this.errorMsg = error
+            this.errorMsg = error.message
           })
       }
     }

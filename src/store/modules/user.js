@@ -71,6 +71,9 @@ export const user = {
       }
       return res
     },
+    UpdateUserInfo({commit},userInfo){
+      commit('resetUserInfo',userInfo)
+    },
     /*
     async InspectToken(){
       const accessToken = this.state.accessToken;
@@ -94,6 +97,7 @@ export const user = {
       commit('removeTokens')
       let userInfo = {nickname:null,username:null}
       commit('setUserInfo',userInfo)
+      router.push({ path: '/login' })
     }
   },
   getters: {

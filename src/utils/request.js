@@ -106,8 +106,13 @@ service.interceptors.response.use(
         Vue.$vToastify.error(`服务器错误: ${error.message}`)
       }else if (error.response.data.detail) {
         error.message = error.response.data.detail
+      }else {
+        var message
+        for (var key in error.response.data){
+          message = error.response.data[key][0]
+        }
+        error.message = message
       }
-      error.message = error.response.data
     } 
     if (error.toString().includes('timeout')) {
       error.message = '抱歉，服务器超时，请稍后再试！'
