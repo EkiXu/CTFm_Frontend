@@ -121,14 +121,15 @@ export default {
     }
   },
   methods:{
-  async genUserList(){
-    const res = await getUserListAPI()
-    this.records = res.data
-    for(let i=0 ;i< this.records.length ;i++){
-      this.records[i].rank = i+1;
-      this.records[i].last_point_at = moment(this.records[i].last_point_at,'YYYY-MM-DD HH:mm:ss').fromNow()
+    async genUserList(){
+      const res = await getUserListAPI()
+      this.records = res.data
+      this.records.sort((a, b) => (a.points < b.points) ? 1 : -1)
+      for(let i=0 ;i< this.records.length ;i++){
+        this.records[i].rank = i+1
+        this.records[i].last_point_at = moment(this.records[i].last_point_at,'YYYY-MM-DD HH:mm:ss').fromNow()
+      }
     }
-  }
   },
   created(){
     this.genUserList()

@@ -13,16 +13,16 @@
         <BaseCard color="#03a9be">
           <template v-slot:heading>
             <div class="display-2 font-weight-light">
-              Edit Profile
+              Profile
             </div>
             <div class="subtitle-1 font-weight-light">
-              Complete your profile
+              Edit your profile
             </div>
           </template>
 
           <v-form
-              ref="updateForm"
-              lazy-validation
+            ref="updateForm"
+            lazy-validation
           >
             <v-container class="py-0">
               <v-row>
@@ -54,6 +54,26 @@
                     label="Nickname"
                     v-model="userProfile.nickname"
                     :rules="rules.nicknameRules"
+                  />
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="6"
+                >
+                  <v-text-field
+                    label="Solved Amount"
+                    readonly
+                    v-model="userProfile.solved_amount"
+                  />
+                </v-col>
+                <v-col
+                  cols="12"
+                  md="6"
+                >
+                  <v-text-field
+                    label="Points"
+                    readonly
+                    v-model="userProfile.points"
                   />
                 </v-col>
                 <v-col

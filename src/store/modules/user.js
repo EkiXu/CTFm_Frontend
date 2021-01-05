@@ -16,7 +16,6 @@ export const user = {
   mutations: {
     updateTokens(state,tokens){
       localStorage.setItem('accessToken', tokens.access)
-      //console.log(newAccessToken);
       state.accessToken = tokens.access
       localStorage.setItem('refreshToken', tokens.refresh)
       state.refreshToken = tokens.refresh
@@ -73,6 +72,10 @@ export const user = {
     },
     UpdateUserInfo({commit},userInfo){
       commit('resetUserInfo',userInfo)
+    },
+    ClearUserState({commit}){
+      commit('resetUserInfo',{})
+      commit('removeTokens')
     },
     /*
     async InspectToken(){

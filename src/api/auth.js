@@ -3,7 +3,7 @@ import service from '@/utils/request'
 // @Summary 用户登录
 // @Produce  application/json
 // @Param data body {username:"string",password:"string"}
-// @Router /auth/login/ [post]
+// @Router /auth/obtainToken/ [post]
 export const obtainTokenAPI = (data) => {
   return service({
     url: '/auth/obtainToken/',
@@ -12,6 +12,10 @@ export const obtainTokenAPI = (data) => {
   })
 }
 
+// @Summary 用户Token更新
+// @Produce  application/json
+// @Param data body {refresh:"string"}
+// @Router /auth/refreshToken/ [post]
 export const refreshTokenAPI = (data) => {
   return service({
     url: '/auth/refreshToken/',
