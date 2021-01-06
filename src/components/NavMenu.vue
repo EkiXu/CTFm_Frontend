@@ -68,12 +68,10 @@
           </h1>
         </div>
       </router-link>
-      <!--<v-list-group
+      <template v-if="accessToken != null">
+      <v-list-group
           prepend-icon="mdi-view-dashboard"
         >
-          <v-list-item-action>
-            <v-icon>mdi-view-dashboard</v-icon>
-          </v-list-item-action>
           <template v-slot:activator>
             <v-list-item-content>
               <v-list-item-title>Dashboard</v-list-item-title>
@@ -84,11 +82,15 @@
             :key="subItem.title"
             :to="subItem.herf"
           >
+            <v-list-item-action>
+              <v-icon v-text="subItem.icon"/>
+            </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title v-text="subItem.title" />
             </v-list-item-content>
           </v-list-item>
-        </v-list-group>-->
+        </v-list-group>
+      </template>
       <v-list>
         <v-list-item
           link
@@ -139,7 +141,13 @@ export default {
     drawer: null,
     dropdown_menu: ['Profile', 'Logout'],
     isLoggedIn: false,
-
+    dashboard:[
+      {
+        title:"profile",
+        herf:"/dashboard/profile",
+        icon:"mdi-account"
+      }
+    ]
     // breadList: []
   }),
   computed: {
@@ -147,7 +155,17 @@ export default {
   },
   created () {
     // this.getBreadcrumb()
-    // console.log(this.userInfo)
+    //console.log(this.userInfo)
+    if(this.userInfo.is_staff){
+      this.dashboard.push(
+        {
+          title:"Manage",
+          herf:"/admin/",
+          icon:"mdi-view-dashboard-variant"
+        }
+      )
+    }
+    console.log(this.dashboard)
   },
   methods: {
     ...mapActions('user', ['Logout']),

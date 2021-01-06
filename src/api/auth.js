@@ -24,9 +24,22 @@ export const refreshTokenAPI = (data) => {
   })
 }
 
-export const logoutAPI = (data) => {
+// @Summary 用户登出
+// @Produce  application/json
+// @Router /auth/logout/ [get]
+export const logoutAPI = () => {
   return service({
     url: '/auth/logout/',
+    method: 'get',
+  })
+}
+
+// @Summary 用户自身状态查询
+// @Produce  application/json
+// @Router /auth/logout/ [get]
+export const getStatusAPI = () => {
+  return service({
+    url: '/user/status',
     method: 'get',
   })
 }
