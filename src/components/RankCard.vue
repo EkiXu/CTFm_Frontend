@@ -60,7 +60,6 @@ export default {
               },
             }],
           yAxes: [{
-              stacked: true,
               ticks: {
                 beginAtZero: true,
                 fontColor:'rgba(255, 255, 255, 0.7)'
@@ -75,7 +74,7 @@ export default {
         },
         legend: {
           labels: {
-              fontColor: 'rgba(255, 255, 255, 0.7)'
+            fontColor: 'rgba(255, 255, 255, 0.7)'
           }
         },
         scaleFontColor: "rgba(255, 255, 255, 0.7)",
