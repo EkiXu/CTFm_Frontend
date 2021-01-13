@@ -58,10 +58,10 @@ const routes = [
     meta: { title: 'Notifications' }
   },
   {
-    path: '/rank',
-    name: 'rank',
-    component: () => import('@/views/Rank.vue'),
-    meta: { title: 'Rank' }
+    path: '/scoreboard',
+    name: 'Scoreboard',
+    component: () => import('@/views/Scoreboard.vue'),
+    meta: { title: 'Scoreboard' }
   },
   {
     path: '/dashboard',

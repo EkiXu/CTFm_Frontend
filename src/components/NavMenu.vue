@@ -77,6 +77,18 @@
               <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item-content>
           </template>
+          <template v-if="this.userInfo.is_staff">
+            <v-list-item
+              href='/admin/'
+            >
+              <v-list-item-action>
+                <v-icon>mdi-view-dashboard-variant</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Admin</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
           <v-list-item
             v-for="subItem in dashboard"
             :key="subItem.title"
@@ -116,13 +128,13 @@
         </v-list-item>
         <v-list-item
           link
-          to="/rank"
+          to="/scoreboard"
         >
           <v-list-item-action>
             <v-icon>mdi-signal</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Rank</v-list-item-title>
+            <v-list-item-title>Scoreboard</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -154,18 +166,7 @@ export default {
     ...mapGetters('user', ['accessToken','userInfo'])
   },
   created () {
-    // this.getBreadcrumb()
-    //console.log(this.userInfo)
-    if(this.userInfo.is_staff){
-      this.dashboard.push(
-        {
-          title:"Manage",
-          herf:"/admin/",
-          icon:"mdi-view-dashboard-variant"
-        }
-      )
-    }
-    console.log(this.dashboard)
+    
   },
   methods: {
     ...mapActions('user', ['Logout']),

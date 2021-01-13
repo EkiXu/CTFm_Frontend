@@ -1,23 +1,20 @@
 <template>
   <v-card
     v-bind="$attrs"
-    class="rank_card--has-heading rank_card pa-3"
+    class="rank_card--has-heading rank_card "
   >
     <div class="d-flex grow flex-wrap">
       <v-sheet
         width="100%"
         elevation="6"
-        class="text-start rank_card__heading mb-n6 pa-7 chart_ring"
+        class="text-start rank_card__heading chart_ring"
         dark
       >
-        <chartist
-          :data="data"
-          :event-handlers="eventHandlers"
-          :options="options"
-          :ratio="ratio"
-          :responsive-options="responsiveOptions"
-          :type="type"
-          style="max-height: 150px;"
+        <TrendCard
+          v-if="loaded"
+          :chartdata="datacollection"
+          :options="chartOption"
+          style="height: 250px;padding:10px;"
         />
       </v-sheet>
     </div>
@@ -27,42 +24,97 @@
 </template>
 
 <script>
+import moment from 'moment'
+import TrendCard from '@/components/TrendCard'
+import {getTrendAPI} from '@/api/contest'
+import { controllers } from 'chart.js'
 export default {
+  components: { TrendCard },
   name: 'RankCard',
   inheritAttrs: false,
-  props: {
-    data: {
-      type: Object,
-      default: () => ({})
-    },
-    eventHandlers: {
-      type: Array,
-      default: () => ([])
-    },
-    options: {
-      type: Object,
-      default: () => ({})
-    },
-    ratio: {
-      type: String,
-      default: undefined
-    },
-    responsiveOptions: {
-      type: Array,
-      default: () => ([])
-    },
-    type: {
-      type: String,
-      required: true,
-      validator: v => ['Bar', 'Line', 'Pie'].includes(v)
-    },
-    text: {
-      type: String,
-      default: ''
-    },
-    title: {
-      type: String,
-      default: ''
+  props: {},
+  data(){
+    return {
+      loaded:false,
+      timeFormat :'YYYY-MM-DD HH:mm:ss',
+      colorset:['#409eff','#fe9205','#f87979','#00bcd4','#39c7ba','#733c8b','#9a4a4c','#2f2527','#3f637b','#635e16'],
+      datacollection :{
+        datasets: []
+      },
+      chartOption:{
+        scales: {
+          xAxes: [{
+              ticks: {
+                fontColor:'rgba(255, 255, 255, 0.7)'
+              },
+              gridLines: {
+                borderDash:[1, 4],
+                color:'rgba(255, 255, 255, 0.6)',
+                zeroLineBorderDash:[1, 4],
+                zeroLineColor: 'rgba(255, 255, 255, 0.6)',
+              },
+              type: "time",
+              time: {
+                  parser: this.timeFormat,
+                  tooltipFormat: this.timeFormat
+              },
+            }],
+          yAxes: [{
+              stacked: true,
+              ticks: {
+                beginAtZero: true,
+                fontColor:'rgba(255, 255, 255, 0.7)'
+              },
+              gridLines: {
+                color:'rgba(255, 255, 255, 0.6)',
+                borderDash:[1, 4],
+                zeroLineBorderDash:[1, 4],
+                zeroLineColor: 'rgba(255, 255, 255, 0.6)',
+              }
+            }]
+        },
+        legend: {
+          labels: {
+              fontColor: 'rgba(255, 255, 255, 0.7)'
+          }
+        },
+        scaleFontColor: "rgba(255, 255, 255, 0.7)",
+        responsive: true,
+        maintainAspectRatio: false,
+      }
+    }
+  },
+  mounted(){
+    this.genTrend()
+  },
+  methods:{
+    async genTrend(){
+      this.loaded = false
+      const res = await getTrendAPI()
+      for(let i in res.data.rows){
+        const user = res.data.rows[i]
+        let records = user.records
+        let row = {
+          label: user.nickname,
+          borderColor: this.colorset[i],
+          fill:false,
+          pointBackgroundColor:this.colorset[i],
+          data:[]
+        }
+        for(let record of records){
+          row.data.push({
+            x: moment(record.date).format(this.timeFormat),
+            y: record.points
+          })
+        }
+        row.data.push({
+            x: moment().format(this.timeFormat),
+            y: user.current_points
+        })
+        console.log(row)
+        this.datacollection.datasets.push(row)
+      }
+      this.loaded = true
     }
   }
 }
@@ -104,30 +156,11 @@ export default {
     }
   }
   .rank_card__heading{
-    max-height: 185px;
+    max-height: 285px;
     position: relative;
-    top: -40px;
+    top: -20px;
     transition: .3s ease;
     z-index: 1;
-    .ct-label{
-    color: inherit;
-    opacity: .7;
-    font-size: 0.975rem;
-    font-weight: 100;
-    }
-    .ct-grid{
-    stroke: rgba(255, 255, 255, 0.2);
-    }
-    .ct-series-a .ct-point,
-    .ct-series-a .ct-line,
-    .ct-series-a .ct-bar,
-    .ct-series-a .ct-slice-donut{
-        stroke: rgba(255,255,255,.8);
-    }
-    .ct-series-a .ct-slice-pie,
-    .ct-series-a .ct-area{
-        fill: rgba(255,255,255,.4);
-    }
   }
 }
 </style>
