@@ -11,7 +11,7 @@
         max-height="90"
         width="auto"
         elevation="6"
-        class="pa-7 text-start category_card__heading mb-n6"
+        class="text-start category_card__heading"
         dark
       >
         <v-icon
@@ -109,7 +109,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .category_card{
   margin: 6px;
   display: flex;
@@ -126,6 +126,7 @@ export default {
     top: -40px;
     transition: .3s ease;
     z-index: 1;
+    padding:28px;
     background-image: -webkit-linear-gradient(left top, #034d8a 0%,#ab22c3 100%);
   }
   > div:first-child {

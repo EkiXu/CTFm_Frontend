@@ -6,6 +6,7 @@
       md="5"
       style="height:100%"
       class="challenges_panel"
+      name = "challenges_panel"
     >
       <v-container class="challenges">
         <!--<h1>Test  {{ $route.params.type }}+1</h1>-->
@@ -60,6 +61,9 @@ export default {
 </script>
 
 <style lang="scss">
+.challenges_panel{
+  overflow: auto;  
+}
 .challenges{
   overflow: auto;
 }

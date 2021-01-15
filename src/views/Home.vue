@@ -1,14 +1,17 @@
 <template>
-  <div class="home">
-    <img
-      alt="CTFm logo"
-      src="../assets/logo.png"
-    >
+  <v-container class="home">
+    <div class="logo">
+      <img
+        alt="CTFm logo"
+        src="../assets/logo2.png"
+      >
+    </div>
     <h1>Welcome to CTFm</h1>
-  </div>
+  </v-container>
 </template>
 
 <script>
+import { getContestAPI } from '@/api/contest'
 // @ is an alias to /src
 export default {
   name: 'Home',
@@ -18,8 +21,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .home{
   text-align: center;
+  .logo{
+    margin: 70px 0;
+  }
 }
 </style>

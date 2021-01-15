@@ -20,6 +20,12 @@ const routes = [
     meta: { title: 'Home' }
   },
   {
+    path: '/about',
+    name: 'about',
+    component: () => import('@/views/About.vue'),
+    meta: { title: 'About' }
+  },
+  {
     path: '/categories',
     name: 'categories',
     component: Categories,
@@ -78,7 +84,7 @@ const routes = [
         component: () => import('@/views/dashboard/Profile.vue'),
         name: 'profile',
         meta: {
-          title: 'Page'
+          title: 'Profile'
         }
       }
     ]

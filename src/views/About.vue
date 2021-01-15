@@ -1,5 +1,20 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <v-container class="about">
+    <div class="logo">
+      <img
+        alt="CTFm logo"
+        src="../assets/logo2.png"
+      >
+    </div>
+    <h1>CTFm,A new CTF platform For All CTFer</h1>
+  </v-container>
 </template>
+
+<style lang="scss" scoped>
+.about{
+  text-align: center;
+  .logo{
+    margin: 70px 0;
+  }
+}
+</style>

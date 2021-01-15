@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <NavMenu />
-    <v-main>
+    <v-main style="height:100%">
       <router-view />
     </v-main>
   </v-app>
@@ -27,6 +27,7 @@ export default {
 html {
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 body{
   width: 100%;
@@ -36,7 +37,6 @@ body{
 #app{
   width: 100%;
   height: 100%;
-  overflow: auto;
 }
 ::-webkit-scrollbar {
   -webkit-appearance: none;
@@ -62,6 +62,6 @@ body{
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(128, 135, 139, 0.8);
+  background: rgba(107, 112, 116, 0.8);
 }
 </style>

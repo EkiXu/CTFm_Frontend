@@ -65,6 +65,10 @@
 import {getChallengeByIDAPI,checkChallengeFlagByIDAPI } from '@/api/challenge'
 export default {
   name: 'Challenge',
+  beforeDestroy: function() {
+    var classes = document.getElementsByName("challenges_panel")[0]
+    classes.className = classes.className.replaceAll("hidden","")
+  },
   data () {
     return {
       showCur: true,
@@ -78,6 +82,9 @@ export default {
         category:''
       }
     }
+  },
+  mounted(){
+    document.getElementsByName("challenges_panel")[0].className +=" hidden";
   },
   methods: {
     async getInfo(){
@@ -93,20 +100,22 @@ export default {
       } catch(error) {
         console.log(error)
         this.submitRecords.push([`> ✗ ${error.message}`])
-        //this.submitRecords.push(['> ✗ Nope.'])
       }
+      /*var records = this.$refs.records
+      records.scrollTop = records.scrollHeight+24
+      console.log(records.scrollTop)*/
     }
   },
   watch:{
     $route(to,from){
       this.getInfo()
     },
-    submitRecords(val){
-        this.$nextTick(() => {
-          var records = this.$refs.records
-          records.scrollTop = records.scrollHeight
-        })
-    }
+    submitRecords() {
+		  this.$nextTick(() => {
+        var records = this.$refs.records
+        records.scrollTop = records.scrollHeight+72
+		  })
+	  }
   },
   created(){
     this.getInfo()
@@ -114,12 +123,18 @@ export default {
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
+@media (max-width: 600px){
+  .hidden{
+    display: none;
+  }
+}
 .task_panel{
   display: flex;
   flex-direction: column;
   background-color: #253D4D;
   box-sizing:border-box;
+  height: 100%;
   .task_page{
     height: calc(100% - 210px);
     overflow: hidden;
@@ -153,12 +168,13 @@ export default {
     }
     .records{
       margin-bottom: 15px;
-      max-height: 48px;
+      height: 72px;
       overflow: auto;
     }
     .typing{
       font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace;
       font-weight: 400;
+      line-height: 24px;
     }
     .flag_input{
       width: 100%;
