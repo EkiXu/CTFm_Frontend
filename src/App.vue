@@ -2,12 +2,13 @@
   <v-app id="app">
     <NavMenu />
     <v-main style="height:100%">
-      <router-view />
+      <router-view :key="$route.fullPath"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import { mapActions,mapGetters } from 'vuex'
 import NavMenu from '@/components/NavMenu.vue'
 export default {
   name: 'App',
@@ -19,6 +20,16 @@ export default {
   }),
   created () {
     this.$vuetify.theme.dark = true
+  },
+  mounted(){
+    this.GetContestInfo()
+    document.title = this.contestInfo.name
+  },
+  computed:{
+    ...mapGetters('contest', ['contestInfo']),
+  },
+  methods:{
+    ...mapActions('contest', ['GetContestInfo']),
   }
 }
 </script>

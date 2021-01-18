@@ -23,6 +23,7 @@
 
 <script>
 import moment from 'moment'
+import {mapActions} from 'vuex'
 import CategoryCard from '@/components/CategoryCard.vue'
 import {getCategoryListAPI} from '@/api/challenge'
 export default {
@@ -35,14 +36,17 @@ export default {
     }
   },
   methods:{
+    ...mapActions('contest', ['SetCategoryList']),
     async genCategoryList(){
       const res = await getCategoryListAPI()
       this.categories = res.data
+      this.SetCategoryList(this.categories)
       for(let i=0 ;i< this.categories.length ;i++){
         this.categories[i].updated_at = moment(this.categories[i].updated_at,'YYYY-MM-DD HH:mm:ss').fromNow()
       }
     }
-  },created(){
+  },
+  created(){
     this.genCategoryList()
   }
 }

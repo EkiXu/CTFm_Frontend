@@ -1,23 +1,24 @@
 <template>
   <v-container class="home">
-    <div class="logo">
-      <img
-        alt="CTFm logo"
-        src="../assets/logo2.png"
-      >
-    </div>
-    <h1>Welcome to CTFm</h1>
+    <vue-markdown
+      style="overflow-wrap: break-word;"
+      :source="contestInfo.description"
+    />
   </v-container>
 </template>
 
 <script>
 import { getContestAPI } from '@/api/contest'
+import {mapGetters} from 'vuex'
 // @ is an alias to /src
 export default {
   name: 'Home',
   components: {
-
-  }
+    
+  },
+  computed:{
+    ...mapGetters('contest', ['contestInfo']),
+  },
 }
 </script>
 

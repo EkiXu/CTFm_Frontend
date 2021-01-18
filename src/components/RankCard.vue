@@ -25,6 +25,7 @@
 
 <script>
 import moment from 'moment'
+import {mapGetters} from 'vuex'
 import TrendCard from '@/components/TrendCard'
 import {getTrendAPI} from '@/api/contest'
 import { controllers } from 'chart.js'
@@ -77,11 +78,15 @@ export default {
             fontColor: 'rgba(255, 255, 255, 0.7)'
           }
         },
+        lineTension:0,
         scaleFontColor: "rgba(255, 255, 255, 0.7)",
         responsive: true,
         maintainAspectRatio: false,
       }
     }
+  },
+  computed:{
+    ...mapGetters('contest', ['contestInfo']),
   },
   mounted(){
     this.genTrend()
@@ -100,6 +105,10 @@ export default {
           pointBackgroundColor:this.colorset[i],
           data:[]
         }
+        row.data.push({
+            x: moment(this.contestInfo.start_time).format(this.timeFormat),
+            y: 0
+        })
         for(let record of records){
           row.data.push({
             x: moment(record.date).format(this.timeFormat),
@@ -107,10 +116,9 @@ export default {
           })
         }
         row.data.push({
-            x: moment().format(this.timeFormat),
+            x: moment().isBefore(this.contestInfo.end_time) ? moment().format(this.timeFormat):moment(this.contestInfo.end_time).format(this.timeFormat),
             y: user.current_points
         })
-        console.log(row)
         this.datacollection.datasets.push(row)
       }
       this.loaded = true

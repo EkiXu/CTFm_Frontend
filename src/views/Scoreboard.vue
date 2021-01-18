@@ -56,18 +56,33 @@ export default {
         { text: 'Solved', value: 'solved_amount' },
         { text: 'Last Point Time', value: 'last_point_at' }
       ],
-      records: []
+      records: [],
+      challenges:[]
     }
   },
   methods:{
     async genUserList(){
       const res = await getScoreboardAPI()
-      this.records = res.data
-      this.records.sort((a, b) => (a.points < b.points) ? 1 : -1)
-      for(let i=0 ;i< this.records.length ;i++){
-        this.records[i].rank = i+1
-        this.records[i].last_point_at = moment(this.records[i].last_point_at,'YYYY-MM-DD HH:mm:ss').fromNow()
+      let records = res.data.players
+      let challenges = res.data.challenges
+      for(let challenge of challenges){
+        this.headers.push({
+          text: challenge.title,
+          value: 'challenge_'+challenge.id,
+        })
+        this.challenges.push({
+          text: challenge.title,
+          value: 'challenge_'+challenge.id,
+        })
       }
+      for(let i in records){
+        records[i].rank = parseInt(i)+1
+        records[i].last_point_at = moment(records[i].last_point_at,'YYYY-MM-DD HH:mm:ss').fromNow()
+        for(let solved_challenge of records[i].solved_challenges)
+          records[i]["challenge_"+solved_challenge.challenge] = "√"
+      }
+      console.log(records)
+      this.records = records
     }
   },
   created(){

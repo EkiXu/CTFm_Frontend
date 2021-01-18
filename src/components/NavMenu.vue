@@ -7,8 +7,8 @@
       elevate-on-scroll
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title class="toolbar-title breadcrumbs">
-        <!--<v-breadcrumbs :items="breadList"></v-breadcrumbs>-->
+      <v-toolbar-title class="toolbar-title">
+        <Breadcrumb/>
       </v-toolbar-title>
       <v-spacer />
       <template v-if="accessToken === null">
@@ -31,7 +31,7 @@
           open-on-hover
           bottom
         >
-          <template v-slot:activator="{ on, attrs }">
+          <template #activator="{ on, attrs }">
             <v-btn
               text
               v-bind="attrs"
@@ -63,23 +63,24 @@
     >
       <router-link to="/">
         <div class="drawer_header">
-          <h1 class="font-weight-light">
-            CTFm
-          </h1>
+          <h1
+            class="font-weight-light"
+            v-text="contestInfo.name"
+          />
         </div>
       </router-link>
       <template v-if="accessToken != null">
-      <v-list-group
+        <v-list-group
           prepend-icon="mdi-view-dashboard"
         >
-          <template v-slot:activator>
+          <template #activator>
             <v-list-item-content>
               <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item-content>
           </template>
           <template v-if="this.userInfo.is_staff">
             <v-list-item
-              href='/admin/'
+              href="/admin/"
               target="_blank"
             >
               <v-list-item-action>
@@ -96,7 +97,7 @@
             :to="subItem.herf"
           >
             <v-list-item-action>
-              <v-icon v-text="subItem.icon"/>
+              <v-icon v-text="subItem.icon" />
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title v-text="subItem.title" />
@@ -111,7 +112,7 @@
           :to="subItem.herf"
         >
           <v-list-item-action>
-            <v-icon v-text="subItem.icon"/>
+            <v-icon v-text="subItem.icon" />
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="subItem.title" />
@@ -124,10 +125,14 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
 export default {
   name: 'NavMenu',
   props: {
     source: String
+  },
+  components:{
+    Breadcrumb
   },
   data: () => ({
     drawer: null,
@@ -136,7 +141,7 @@ export default {
     menu:[
       {
         title:"Challenges",
-        herf:"/categories",
+        herf:"/category",
         icon:"mdi-flag"
       },
       {
@@ -161,30 +166,19 @@ export default {
         herf:"/dashboard/profile",
         icon:"mdi-account"
       }
-    ],
-    breadList: []
+    ]
   }),
   computed: {
-    ...mapGetters('user', ['accessToken','userInfo'])
+    ...mapGetters('user', ['accessToken','userInfo']),
+    ...mapGetters('contest', ['contestInfo']),
   },
   mounted () {
-    this.getBreadcrumb()
+
   },
   methods: {
     ...mapActions('user', ['Logout']),
     isHome (route) {
       return route.name === 'home'
-    },
-    getBreadcrumb () {
-      const matched = this.$route.matched
-      for (const match of matched) {
-        var r = {}
-        r.text = match.meta.title
-        r.href = match.path
-        console.log(r)
-        this.breadList.push(r)
-      }
-      console.log(this.breadList)
     }
   }
 }
@@ -219,11 +213,6 @@ export default {
   &:after
   {
     background: #00bcd4
-  }
-}
-.breadcrumbs{
-  a{
-    color:#fff !important;
   }
 }
 .drawer{

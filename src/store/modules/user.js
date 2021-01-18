@@ -57,7 +57,7 @@ export const user = {
         if (redirect) {
           router.push({ path: redirect })
         } else {
-          router.push({ path: '/categories' })
+          router.push({ path: '/category' })
         }
       }
       return res

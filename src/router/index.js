@@ -26,10 +26,10 @@ const routes = [
     meta: { title: 'About' }
   },
   {
-    path: '/categories',
+    path: '/category',
     name: 'categories',
     component: Categories,
-    meta: { title: 'Categories' }
+    meta: { title: 'Category' }
   },
   {
     path: '/category/:type',
@@ -93,7 +93,7 @@ const routes = [
     path: '/error/404',
     name: '404 NOT FOUND',
     component: () => import('@/views/error/Error404.vue'),
-    meta: { title: '' }
+    meta: { title: '404' }
   },
   {
     path: '*',

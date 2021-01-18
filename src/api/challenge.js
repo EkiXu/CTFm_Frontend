@@ -4,7 +4,6 @@ import service from '@/utils/request'
 // @Produce  application/json
 // @Param data body {"name":"strings","description":"strings","category":"strings","points":500,"is_hidden":false}
 // @Router /challenges [post]
-
 export const getCategoryListAPI = () => {
   return service({
     url: '/category/',

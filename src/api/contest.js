@@ -3,7 +3,7 @@ import service from '@/utils/request'
 // @Summary 获取比赛信息
 // @Produce  application/json
 // @Router /contest/ [post]
-export const getContestAPI = () => {
+export const getContestInfoAPI = () => {
   return service({
     url: '/contest/',
     method: 'get',

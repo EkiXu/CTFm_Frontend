@@ -65,10 +65,6 @@
 import {getChallengeByIDAPI,checkChallengeFlagByIDAPI } from '@/api/challenge'
 export default {
   name: 'Challenge',
-  beforeDestroy: function() {
-    var classes = document.getElementsByName("challenges_panel")[0]
-    classes.className = classes.className.replaceAll("hidden","")
-  },
   data () {
     return {
       showCur: true,
@@ -84,7 +80,19 @@ export default {
     }
   },
   mounted(){
-    document.getElementsByName("challenges_panel")[0].className +=" hidden";
+    try{
+      document.getElementsByName("challenges_panel")[0].className +=" hidden";
+    }catch(e){
+
+    }
+  },
+  beforeDestroy: function() {
+    try{
+      var classes = document.getElementsByName("challenges_panel")[0]
+      classes.className = classes.className.replaceAll("hidden","")
+    }catch(e){
+    
+    }
   },
   methods: {
     async getInfo(){
@@ -101,9 +109,6 @@ export default {
         console.log(error)
         this.submitRecords.push([`> ✗ ${error.message}`])
       }
-      /*var records = this.$refs.records
-      records.scrollTop = records.scrollHeight+24
-      console.log(records.scrollTop)*/
     }
   },
   watch:{
@@ -142,6 +147,9 @@ export default {
       padding: 3.0em;
       height: 100%;
       overflow: auto;
+      img {
+        max-width: 100%;
+      }
       .task_title{
         font-size:48px;
       }

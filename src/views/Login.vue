@@ -118,9 +118,6 @@ export default {
       }
     }
   },
-  created () {
-    this.curYear = new Date().getFullYear()
-  },
   methods: {
     ...mapActions('user', ['ObtainToken']),
     submitForm () {
