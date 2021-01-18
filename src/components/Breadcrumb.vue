@@ -103,7 +103,6 @@ export default {
 }
 .breadcrumbs{
   li{
-    font-size: 48px;
     font-weight: bold;
     a{
       color: #fff !important;
