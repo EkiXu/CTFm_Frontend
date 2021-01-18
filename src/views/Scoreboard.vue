@@ -81,7 +81,6 @@ export default {
         for(let solved_challenge of records[i].solved_challenges)
           records[i]["challenge_"+solved_challenge.challenge] = "√"
       }
-      console.log(records)
       this.records = records
     }
   },
