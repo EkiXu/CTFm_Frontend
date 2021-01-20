@@ -9,21 +9,23 @@
       >
         <v-row style="height:48px;" />
         <RankCard>
-          <v-data-table
-            :headers="headers"
-            :items="records"
-            :page.sync="page"
-            :items-per-page="itemsPerPage"
-            hide-default-footer
-            class="elevation-1"
-            @page-count="pageCount = $event"
-            disable-sort
-          />
-          <div class="text-center pt-2">
-            <v-pagination
-              v-model="page"
-              :length="pageCount"
+          <div class="scoreboard">
+            <v-data-table
+              :headers="headers"
+              :items="records"
+              :page.sync="page"
+              :items-per-page="itemsPerPage"
+              hide-default-footer
+              class="elevation-1"
+              @page-count="pageCount = $event"
+              disable-sort
             />
+            <div class="text-center pt-2">
+              <v-pagination
+                v-model="page"
+                :length="pageCount"
+              />
+            </div>
           </div>
         </RankCard>
       </v-col>
@@ -89,3 +91,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.scoreboard{
+  max-height: calc(100vh - 370px);
+  overflow: auto;
+}
+</style>

@@ -15,6 +15,9 @@
   text-align: center;
   .logo{
     margin: 70px 0;
+    img{
+      max-width: 100%;
+    }
   }
 }
 </style>

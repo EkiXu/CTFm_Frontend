@@ -6,7 +6,7 @@
       md="5"
       style="height:100%"
       class="challenges_panel"
-      name = "challenges_panel"
+      name="challenges_panel"
     >
       <v-container class="challenges">
         <!--<h1>Test  {{ $route.params.type }}+1</h1>-->
@@ -46,13 +46,18 @@ export default {
     }
   },
   created (){
-    this.initialize()
+    this.genChallengesList()
+  },
+  watch:{
+    $route(to,from){
+      this.genChallengesList()
+    },
   },
   methods: {
     select (index) {
       this.activeIndex = index
     },
-    async initialize(){
+    async genChallengesList(){
       const res = await getChallengesListByCategoryNameAPI(this.$route.params.type);
       this.challengelist = res.data
     }

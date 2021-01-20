@@ -27,7 +27,7 @@
         <v-col
           cols="12"
           sm="8"
-          md="4"
+          md="6"
         >
           <v-card class="elevation-12">
             <v-toolbar
@@ -84,8 +84,17 @@
                   v-model="registerForm.rePassword"
                   :rules="rules.rePasswordRules"
                 />
+                <v-row justify="center">
+                  <vue-recaptcha
+                    @verify="recaptchaVerify"
+                    @expired="recaptchaOnExpired"
+                    :sitekey="sitekey"
+                    :load-recaptcha-script="true"
+                    theme="dark"
+                    recaptcha-host="www.recaptcha.net"
+                  />
+                </v-row>
               </v-form>
-              <!--<v-alert type="success">I'm a success alert.</v-alert>-->
             </v-card-text>
             <v-card-actions>
               <v-spacer />
@@ -104,19 +113,23 @@
 </template>
 
 <script>
+import VueRecaptcha from 'vue-recaptcha';
 import { mapActions } from 'vuex'
 import { registerAPI } from '@/api/auth'
 export default {
   name: 'Register',
+  components: { VueRecaptcha },
   data () {
     return {
+      sitekey: process.env.VUE_APP_RECAPTCHA_PUBLIC_KEY,
       isWaiting: false,
       registerForm: {
         email: '',
         username: '',
         nickname: '',
         password: '',
-        rePassword: ''
+        rePassword: '',
+        recaptcha:'',
       },
       valid: true,
       errorMsg: '',
@@ -154,8 +167,19 @@ export default {
   },
   methods: {
     ...mapActions('user', ['LoginIn']),
+    recaptchaVerify(response) {
+      this.registerForm.recaptcha = response
+    },
+    recaptchaOnExpired() {
+      this.registerForm.recaptcha = ''
+      this.$vToastify.warning("recaptcha Expired.")
+    },
     submitForm () {
       if (this.$refs.registerForm.validate()) {
+        if(this.registerForm.recaptcha === ''){
+          this.$vToastify.error("Please Verfiy Recaptcha!")
+          return
+        }
         const res = registerAPI(this.registerForm)
         res.then(() => {
           this.$vToastify.success("Register Successfully!")

@@ -8,7 +8,7 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title class="toolbar-title">
-        <Breadcrumb/>
+        <Breadcrumb />
       </v-toolbar-title>
       <v-spacer />
       <template v-if="accessToken === null">
@@ -126,6 +126,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
+import client from '@/utils/websocket'
 export default {
   name: 'NavMenu',
   props: {
@@ -172,14 +173,17 @@ export default {
     ...mapGetters('user', ['accessToken','userInfo']),
     ...mapGetters('contest', ['contestInfo']),
   },
-  mounted () {
-
-  },
   methods: {
     ...mapActions('user', ['Logout']),
-    isHome (route) {
-      return route.name === 'home'
+    observeNotification(){
+      const wsClient = client;
     }
+  },
+  mounted(){
+    this.observeNotification()
+  },
+  beforeDestroy(){
+
   }
 }
 </script>

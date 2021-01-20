@@ -11248,6 +11248,11 @@ vue-meditor@^2.1.1:
   resolved "https://registry.yarnpkg.com/vue-meditor/-/vue-meditor-2.1.1.tgz#ba02922cd4b392492cb0b8a0b5b76930b2af3117"
   integrity sha512-xvLqqvS4LzEJ7TqW2mDSzvueMey/WM92o0jfmqZWBTks1/8EAmn0ehqZDlcq/W+1goQpUmWE4m3yJjzQnoZhQQ==
 
+vue-native-websocket@^2.0.14:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/vue-native-websocket/-/vue-native-websocket-2.0.14.tgz#fddb56f9f93d2ecc861486ee3c8f29506ea2a168"
+  integrity sha512-oK8+xG1gmqRs4JngHGwEc4zWoRjsdMB20Sz8pemkh4lW2Vr2676/cDRtd30aGnO2xF7Oxf003wS5JO0kypUsCw==
+
 vue-particles@^1.0.9:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/vue-particles/-/vue-particles-1.0.9.tgz#29d9cc2be0157df1c0a87ec3b96c96f33279526e"
@@ -11255,6 +11260,11 @@ vue-particles@^1.0.9:
   dependencies:
     particles.js "^2.0.0"
     vue "^2.2.6"
+
+vue-recaptcha@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/vue-recaptcha/-/vue-recaptcha-1.3.0.tgz#e668e54f798c6333057ef38b4425a72f451ce478"
+  integrity sha512-9Qf1niyHq4QbEUhsvdUkS8BoOyhYwpp8v+imUSj67ffDo9RQ6h8Ekq8EGnw/GKViXCwWalp7EEY/n/fOtU0FyA==
 
 vue-router@^3.2.0:
   version "3.4.9"

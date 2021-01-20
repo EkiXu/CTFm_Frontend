@@ -1,6 +1,7 @@
 <template>
   <v-container class="home">
     <vue-markdown
+      class="article"
       style="overflow-wrap: break-word;"
       :source="contestInfo.description"
     />
@@ -22,11 +23,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .home{
   text-align: center;
-  .logo{
-    margin: 70px 0;
+}
+.article{
+  height: calc(100vh - 64px);
+  overflow: auto;
+  img{
+    max-width: 100%;
   }
 }
 </style>

@@ -64,7 +64,6 @@ export const user = {
     },
     async RefreshToken({ commit },token){
       const res = await refreshTokenAPI({refresh:token})
-      console.log(res)
       if(res.status == 200){
         commit('updateAccessToken',res.data.access)
       }

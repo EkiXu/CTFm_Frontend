@@ -23,10 +23,8 @@ module.exports = {
       errors: true
     },
     proxy: {
-      // 把key的路径代理到target位置
-      // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [process.env.VUE_APP_BASE_API]: { // 需要代理的路径   例如 '/api'
-        target: 'http://127.0.0.1:8000', // 代理到 目标路径
+      [process.env.VUE_APP_BASE_API]: { 
+        target: 'http://127.0.0.1:8000',
         changeOrigin: true
       }
     }
@@ -35,7 +33,6 @@ module.exports = {
     requireModuleExtension: true
   },
   configureWebpack: {
-    //    @路径走src文件夹
     resolve: {
       alias: {
         '@': resolve('src')

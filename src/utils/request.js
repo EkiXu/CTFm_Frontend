@@ -55,7 +55,7 @@ service.interceptors.request.use(
             'Content-Type': 'application/json'
         }
     }
-    if(config.url.startsWith('/auth')){
+    if(config.url.startsWith('/auth') || config.url.startsWith('/contest')){
       return config
     }
     // 获取token
