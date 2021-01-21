@@ -17,6 +17,8 @@
               :items-per-page="itemsPerPage"
               hide-default-footer
               class="elevation-1"
+              :loading="isLoading"
+              loading-text="Loading... Please wait"
               @page-count="pageCount = $event"
               disable-sort
             />
@@ -46,6 +48,7 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
+      isLoading:true,
       headers: [
         {
           text: 'Rank',
@@ -81,9 +84,10 @@ export default {
         records[i].rank = parseInt(i)+1
         records[i].last_point_at = moment(records[i].last_point_at,'YYYY-MM-DD HH:mm:ss').fromNow()
         for(let solved_challenge of records[i].solved_challenges)
-          records[i]["challenge_"+solved_challenge.challenge] = "√"
+          records[i]["challenge_"+solved_challenge.challenge] = "🚩"
       }
       this.records = records
+      this.isLoading = false
     }
   },
   created(){
