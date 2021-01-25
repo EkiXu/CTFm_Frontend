@@ -140,8 +140,8 @@ export default {
         ],
         usernameRules: [
           v => !!v || 'Username is required',
-          v => (v && v.length >= 3) || 'name must be more than 4 characters',
-          v => (v && v.length <= 16) || 'name must be less than 16 characters',
+          v => (v && v.length >= 3 ) || 'name must be more than 2 characters',
+          v => (v && v.length <= 16) || 'name must be less than 17 characters',
           v => /^[a-zA-Z0-9_-]{3,16}$/.test(v) ||  'Username must be valid'
         ],
         nicknameRules: [
