@@ -24,6 +24,11 @@
       </div>
     </div>
     <div class="task_action">
+      <div class="action_fab">
+        <attachment-button
+          :url="this.challenge.attachment_url"
+        />
+      </div>
       <div class="action_header">
         <i
           class="mdi mdi-console"
@@ -63,7 +68,9 @@
 
 <script>
 import {getChallengeByIDAPI,checkChallengeFlagByIDAPI } from '@/api/challenge'
+import AttachmentButton from '@/components/AttachmentButton.vue';
 export default {
+  components: { AttachmentButton },
   name: 'Challenge',
   data () {
     return {
@@ -164,6 +171,11 @@ export default {
     background-color: #1A1B1C;
     height: 240px;
     bottom: 0;
+    .action_fab{
+      position: absolute;
+      right: 6%;
+      bottom: 206px;
+    }
     .action_header{
       width: 100%;
       color: #0AEECC;

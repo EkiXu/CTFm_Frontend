@@ -24,6 +24,16 @@ function directLogin() {
   })
 }
 
+function direct404() {
+  router.push({
+      path: '/error/404',
+      query: {
+        redirect: router.currentRoute.fullPath
+      }
+  })
+}
+
+
 function isTokenExpired() {
   const accessToken = store.getters['user/accessToken']
   const decoded = jwt_decode(accessToken)
@@ -112,6 +122,10 @@ service.interceptors.response.use(
         error.message = 'Forbidden'
         store.dispatch('user/ClearUserState')
         directLogin()
+        return 
+      }else if(error.response.status == 404){
+        direct404()
+        return 
       }else if (error.response.data.detail) {
         error.message = error.response.data.detail
       }else {
