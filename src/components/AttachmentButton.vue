@@ -9,6 +9,7 @@
         :href="url"
         v-bind="attrs"
         v-on="on"
+        :disabled ="url === null ||url === ''"
       >
         <v-icon>
           mdi-cloud-download
