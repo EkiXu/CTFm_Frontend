@@ -38,7 +38,7 @@ export default {
     return {
       loaded:false,
       timeFormat :'YYYY-MM-DD HH:mm:ss',
-      colorset:['#409eff','#fe9205','#f87979','#00bcd4','#39c7ba','#733c8b','#9a4a4c','#2f2527','#3f637b','#635e16'],
+      colorset:['#409eff','#fe9205','#f87979','#00bcd4','#39c7ba','#733c8b','#9a4a4c','#dd162a','#3f637b','#635e16'],
       datacollection :{
         datasets: []
       },

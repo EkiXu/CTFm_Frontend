@@ -20,6 +20,8 @@
               :loading="isLoading"
               loading-text="Loading... Please wait"
               @page-count="pageCount = $event"
+              height="300"
+              fixed-header
               disable-sort
             />
             <div class="text-center pt-2">
@@ -97,7 +99,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .scoreboard{
-  max-height: calc(100vh - 370px);
-  overflow: auto;
+  
 }
 </style>
