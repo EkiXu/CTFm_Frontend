@@ -49,7 +49,7 @@ export default {
     return {
       page: 1,
       pageCount: 0,
-      itemsPerPage: 10,
+      itemsPerPage: 5,
       isLoading:true,
       headers: [
         {
