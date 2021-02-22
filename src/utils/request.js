@@ -120,9 +120,9 @@ service.interceptors.response.use(
     }else if(error.response){
       if(error.response.status == 401 || error.response.status == 403) {
         error.message = 'Forbidden'
-        store.dispatch('user/ClearUserState')
-        directLogin()
-        return 
+        //store.dispatch('user/ClearUserState')
+        //directLogin()
+        //return 
       }else if(error.response.status == 404){
         direct404()
         return 

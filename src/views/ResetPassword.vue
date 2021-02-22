@@ -38,7 +38,7 @@
               dark
               flat
             >
-              <v-toolbar-title>Login</v-toolbar-title>
+              <v-toolbar-title>Reset Password</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
               <v-alert
@@ -50,40 +50,36 @@
                 {{ errorMsg }}
               </v-alert>
               <v-form
-                ref="loginForm"
+                ref="resetPasswordForm"
                 lazy-validation
               >
                 <v-text-field
-                  v-model="loginForm.username"
-                  label="Username"
-                  name="username"
-                  prepend-icon="mdi-account"
-                  type="text"
-                  :rules="rules.usernameRules"
-                />
-                <v-text-field
-                  v-model="loginForm.password"
                   id="password"
                   label="Password"
                   name="password"
                   prepend-icon="mdi-lock"
                   type="password"
+                  v-model="resetPasswordForm.password"
                   :rules="rules.passwordRules"
+                />
+                <v-text-field
+                  id="rePassword"
+                  label="RePassword"
+                  name="rePassword"
+                  prepend-icon="mdi-lock-outline"
+                  type="password"
+                  v-model="resetPasswordForm.rePassword"
+                  :rules="rules.rePasswordRules"
                 />
               </v-form>
             </v-card-text>
             <v-card-actions>
-              <div class="forget">
-                <a href="/forget_password">
-                  Forget Your Password?
-                </a>
-              </div>
               <v-spacer />
               <v-btn
                 color="primary"
                 @click="submitForm"
               >
-                Login
+                Reset
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -94,8 +90,7 @@
 </template>
 <script>
 // @ is an alias to /src
-import { mapActions } from 'vuex'
-const path = process.env.VUE_APP_BASE_API
+import {restPasswordAPI} from '@/api/auth'
 export default {
   name: 'Login',
   components: {},
@@ -103,32 +98,38 @@ export default {
     return {
       valid: true,
       curYear: 0,
-      loginForm: {
+      resetPasswordForm: {
         username: '',
         password: '',
         invalid: false,
         errorMsg: ''
       },
-      path: path,
       isWaiting: false,
       rules: {
-        usernameRules: [
-          v => !!v || 'Username is required',
-          v => (v && v.length >= 3 ) || 'name must be more than 2 characters',
-          v => (v && v.length <= 16) || 'name must be less than 17 characters',
-          v => /^[a-zA-Z0-9_-]{3,16}$/.test(v) ||  'Username must be valid'
+        passwordRules: [
+          v => !!v || 'Password is required',
+          v => (v && v.length >= 8) || 'Password must be more than 8 characters'
         ],
-        passwordRules: [v => !!v || 'Password is required']
+        rePasswordRules: [
+          v => !!v || 'RePassword is required',
+          v =>
+            (v && v.length >= 8) || 'Password must be more than 8 characters',
+          v =>
+            (!!v && v) === this.resetPasswordForm.password ||
+            'Password must be match with RePassword'
+        ]
       }
     }
   },
   methods: {
-    ...mapActions('user', ['ObtainToken']),
     submitForm () {
       this.isWaiting = true
-      if (this.$refs.loginForm.validate()) {
-        const res = this.ObtainToken(this.loginForm)
-        res.catch(error => {
+      if (this.$refs.resetPasswordForm.validate()) {
+        const res = restPasswordAPI(this.$route.params.user_id,this.$route.params.token,{"password":this.resetPasswordForm.password})
+        res.then(value => {
+          this.$vToastify.success(value.data.detail)
+          this.$router.push({ name: 'login' })
+        }).catch(error => {
             this.valid = false
             this.errorMsg = error.message
           })
@@ -146,8 +147,5 @@ export default {
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   display: flex;
-}
-.forget{
-  margin:0 12px 0 12px;
 }
 </style>

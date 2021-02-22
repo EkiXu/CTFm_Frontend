@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { getContestAPI } from '@/api/contest'
 import {mapGetters} from 'vuex'
 // @ is an alias to /src
 export default {

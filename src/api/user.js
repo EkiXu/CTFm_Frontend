@@ -21,3 +21,25 @@ export const updateUserDetailByIDAPI = (id,data) => {
     data:data
   })
 }
+
+// @Summary 用户自身状态查询
+// @Produce  application/json
+// @Router /user/status/ [get]
+export const getStatusAPI = () => {
+  return service({
+    url: '/user/status',
+    method: 'get',
+  })
+}
+
+// @Summary 发送验证邮件
+// @Produce  application/json
+// @Router /user/send_verify_email/ [post]
+// @Param data body {email:"string"}
+export const sendVerifyEmailAPI = (data) => {
+  return service({
+    url: '/user/send_verify_email/',
+    method: 'post',
+    data:data
+  })
+}

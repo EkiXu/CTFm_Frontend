@@ -6,7 +6,7 @@ import service from '@/utils/request'
 // @Router /auth/obtainToken/ [post]
 export const obtainTokenAPI = (data) => {
   return service({
-    url: '/auth/obtainToken/',
+    url: '/auth/obtain_token/',
     method: 'post',
     data: data
   })
@@ -18,7 +18,7 @@ export const obtainTokenAPI = (data) => {
 // @Router /auth/refreshToken/ [post]
 export const refreshTokenAPI = (data) => {
   return service({
-    url: '/auth/refreshToken/',
+    url: '/auth/refresh_token/',
     method: 'post',
     data: data
   })
@@ -33,14 +33,37 @@ export const logoutAPI = () => {
     method: 'get',
   })
 }
-
-// @Summary 用户自身状态查询
+// @Summary 确认邮件验证
 // @Produce  application/json
-// @Router /auth/logout/ [get]
-export const getStatusAPI = () => {
+// @Router /auth/activate/:user_id/:token/ [get]
+export const activateAPI = (user_id,token) => {
   return service({
-    url: '/user/status',
+    url: '/auth/activate/'+user_id+'/'+token+'/',
     method: 'get',
+  })
+}
+
+// @Summary 发送重置密码邮件
+// @Produce  application/json
+// @Router /auth/reset_password [post]
+// @Param data body {email:"string"}
+export const sendRestPasswordEmailAPI = (data) => {
+  return service({
+    url: '/auth/reset_password_email/',
+    method: 'post',
+    data: data,
+  })
+}
+
+// @Summary 确认重置密码
+// @Produce  application/json
+// @Router /auth/logout/ [post]
+// @Param data body {new_passowrd:"string"}
+export const restPasswordAPI = (user_id,token,data) => {
+  return service({
+    url: '/auth/reset_password/'+user_id+'/'+token+'/',
+    method: 'post',
+    data: data,
   })
 }
 

@@ -183,10 +183,12 @@ export default {
         const res = registerAPI(this.registerForm)
         res.then(() => {
           this.$vToastify.success("Register Successfully!")
+          this.$vToastify.success("Please Check your email to activate your account!")
           this.$router.push({ name: 'login' })
         }).catch(error => {
           this.valid = false
           this.$vToastify.error(error.message)
+          this.registerForm.recaptcha = ''
           return
         })
       }

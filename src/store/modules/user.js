@@ -11,6 +11,9 @@ export const user = {
       id:0,
       nickname: '',
       username: '',
+      is_staff:false,
+      is_hidden:true,
+      is_active:false,
     },
   },
   mutations: {
@@ -51,7 +54,7 @@ export const user = {
         let tokens = {access:res.data.access,refresh:res.data.refresh}
         commit('updateTokens',tokens)
         const decoded = jwt_decode(res.data.access)
-        let userInfo = {nickname:decoded.nickname,username:decoded.username,id:decoded.id,is_hidden:decoded.is_hidden,is_staff:decoded.is_staff}
+        let userInfo = {nickname:decoded.nickname,username:decoded.username,id:decoded.id,is_hidden:decoded.is_hidden,is_staff:decoded.is_staff,is_active:decoded.is_active}
         commit('setUserInfo',userInfo)
         const redirect = router.history.current.query.redirect
         if (redirect) {

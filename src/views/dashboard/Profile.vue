@@ -28,12 +28,35 @@
               <v-row>
                 <v-col
                   cols="12"
+                  v-if="!this.userProfile.is_verified"
+                >
+                  <v-alert
+                    dense
+                    outlined
+                    border="left"
+                    type="warning"
+                  >
+                    Please check your email to actviate your account!
+                  </v-alert>
+                </v-col>
+                <v-col
+                  :cols="userProfile.is_verified ? 12:8"
                 >
                   <v-text-field
                     label="Email Address"
                     v-model="userProfile.email"
                     :rules="rules.emailRules"
+                    :readonly="userProfile.is_verified"
                   />
+                </v-col>
+                <v-col
+                  v-if="!userProfile.is_verified"
+                  cols="4"
+                >
+                  <v-btn
+                    block
+                    @click="sendVerifyEmail"
+                  >Verify</v-btn>
                 </v-col>
                 <v-col
                   cols="12"
@@ -120,7 +143,7 @@
 <script>
 import { mapGetters,mapActions} from 'vuex'
 import BaseCard from '@/components/BaseCard.vue'
-import {getUserDetailByIDAPI,updateUserDetailByIDAPI} from '@/api/user'
+import {getUserDetailByIDAPI,updateUserDetailByIDAPI,sendVerifyEmailAPI} from '@/api/user'
 export default {
   components: {
     BaseCard
@@ -133,6 +156,7 @@ export default {
         nickname:'',
         old_password: '',
         new_password:'',
+        is_verified:true,
       },
       rules: {
         emailRules: [
@@ -160,8 +184,14 @@ export default {
   methods:{
     ...mapActions('user', ['UpdateUserInfo']),
     async genUserInfo(){
-      let res = await getUserDetailByIDAPI(this.userInfo.id)
+      const res = await getUserDetailByIDAPI(this.userInfo.id)
       this.userProfile = res.data
+    },
+    async sendVerifyEmail(){
+      const res = await sendVerifyEmailAPI({"email":this.userProfile.email})
+      if(res.status == 200){
+        this.$vToastify.success(res.data.detail)
+      }
     },
     updateUserInfo(){
       if (this.$refs.updateForm.validate()) {

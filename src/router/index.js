@@ -58,6 +58,24 @@ const routes = [
     meta: { title: 'Register' }
   },
   {
+    path: '/forget_password',
+    name: 'Forget Password',
+    component: () => import('@/views/ForgetPassword.vue'),
+    meta: { title: 'Forget Password' }
+  },
+  {
+    path: '/activate/:user_id/:token',
+    name: 'activate',
+    component: () => import('@/views/ActivateEmail.vue'),
+    meta: { title: 'Activate Email' }
+  },
+  {
+    path: '/reset_password/:user_id/:token',
+    name: 'reset_password',
+    component: () => import('@/views/ResetPassword.vue'),
+    meta: { title: 'Reset Password' }
+  },
+  {
     path: '/notifications',
     name: 'notifications',
     component: () => import('@/views/Notifications.vue'),

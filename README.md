@@ -39,6 +39,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [x] Basic Scoreboard
 - [x] Trend Chart
 - [x] reCaptcha Support
+- [x] Email Bind
 - [ ] RealTime Notification
 - [ ] Dynamic Docker Challenge Action
 - [ ] Team Support
