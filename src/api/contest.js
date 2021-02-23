@@ -20,12 +20,32 @@ export const getTrendAPI = () => {
     })
   }
 
-// @Summary 获取趋势
+// @Summary 获取积分榜
 // @Produce  application/json
 // @Router /contest/scoreboard/ [get]
 export const getScoreboardAPI = () => {
   return service({
     url: '/contest/scoreboard/',
+    method: 'get',
+  })
+}
+
+// @Summary 获取校内趋势
+// @Produce  application/json
+// @Router /contest/trend/ [get]
+export const getStuTrendAPI = () => {
+  return service({
+    url: '/contest/trend/stu/',
+    method: 'get',
+  })
+}
+
+// @Summary 获取校内积分榜
+// @Produce  application/json
+// @Router /contest/scoreboard/ [get]
+export const getStuScoreboardAPI = () => {
+  return service({
+    url: '/contest/scoreboard/stu/',
     method: 'get',
   })
 }

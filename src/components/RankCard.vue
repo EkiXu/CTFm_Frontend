@@ -27,13 +27,18 @@
 import moment from 'moment'
 import {mapGetters} from 'vuex'
 import TrendCard from '@/components/TrendCard'
-import {getTrendAPI} from '@/api/contest'
+import {getTrendAPI,getStuTrendAPI} from '@/api/contest'
 import { controllers } from 'chart.js'
 export default {
   components: { TrendCard },
   name: 'RankCard',
   inheritAttrs: false,
-  props: {},
+  props: {
+    type: {
+      type:String,
+      default:null
+    }
+  },
   data(){
     return {
       loaded:false,
@@ -78,7 +83,7 @@ export default {
             fontColor: 'rgba(255, 255, 255, 0.7)'
           }
         },
-        lineTension:0,
+        bezierCurve: false,
         scaleFontColor: "rgba(255, 255, 255, 0.7)",
         responsive: true,
         maintainAspectRatio: false,
@@ -94,7 +99,14 @@ export default {
   methods:{
     async genTrend(){
       this.loaded = false
-      const res = await getTrendAPI()
+      var res;
+      if(!this.type){
+        res = await getTrendAPI()
+      }else if(this.type == 'stu'){
+        res = await getStuTrendAPI()
+      }else {
+        res = []
+      }
       for(let i in res.data.rows){
         const user = res.data.rows[i]
         let records = user.records

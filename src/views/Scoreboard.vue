@@ -8,7 +8,9 @@
         md="10"
       >
         <v-row style="height:48px;" />
-        <RankCard>
+        <RankCard
+          :type="this.$route.params.type"
+        >
           <div class="scoreboard">
             <v-data-table
               :headers="headers"
@@ -40,7 +42,7 @@
 <script>
 import moment from 'moment'
 import RankCard from '@/components/RankCard.vue'
-import { getScoreboardAPI } from '@/api/contest'
+import { getScoreboardAPI,getStuScoreboardAPI } from '@/api/contest'
 export default {
   components: {
     RankCard
@@ -69,7 +71,16 @@ export default {
   },
   methods:{
     async genUserList(){
-      const res = await getScoreboardAPI()
+      let type = this.$route.params.type
+      var res;
+      if(!type){
+        res = await getScoreboardAPI()
+      }else if(type === 'stu'){
+        res = await getStuScoreboardAPI()
+      }else {
+        this.$router.push("/404")
+        return 
+      }
       let records = res.data.players
       let challenges = res.data.challenges
       for(let challenge of challenges){
