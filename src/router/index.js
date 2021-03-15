@@ -88,12 +88,6 @@ const routes = [
     meta: { title: 'Scoreboard' }
   },
   {
-    path: '/scoreboard/:type',
-    name: 'Section Scoreboard',
-    component: () => import('@/views/Scoreboard.vue'),
-    meta: { title: 'Scoreboard' }
-  },
-  {
     path: '/dashboard',
     component: DashboardLayout,
     redirect: '/dashboard/profile',

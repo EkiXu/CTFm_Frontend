@@ -18,7 +18,6 @@
         />
       </v-sheet>
     </div>
-
     <slot />
   </v-card>
 </template>
@@ -28,7 +27,6 @@ import moment from 'moment'
 import {mapGetters} from 'vuex'
 import TrendCard from '@/components/TrendCard'
 import {getTrendAPI,getStuTrendAPI} from '@/api/contest'
-import { controllers } from 'chart.js'
 export default {
   components: { TrendCard },
   name: 'RankCard',
@@ -93,19 +91,22 @@ export default {
   computed:{
     ...mapGetters('contest', ['contestInfo']),
   },
+  watch:{
+    type: function (new_type, old_type) {
+      this.genTrend(new_type)
+    }
+  },
   mounted(){
-    this.genTrend()
   },
   methods:{
-    async genTrend(){
+    async genTrend(type){
       this.loaded = false
       var res;
-      if(!this.type){
-        res = await getTrendAPI()
-      }else if(this.type == 'stu'){
+      this.datacollection.datasets = []
+      if(this.type == 'School'){
         res = await getStuTrendAPI()
       }else {
-        res = []
+        res = await getTrendAPI()
       }
       for(let i in res.data.rows){
         const user = res.data.rows[i]

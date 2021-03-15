@@ -9,27 +9,44 @@
       >
         <v-row style="height:48px;" />
         <RankCard
-          :type="this.$route.params.type"
+          v-bind:type="rank_categories[current_rank_category_id]"
         >
+          <v-tabs
+            v-model="current_rank_category_id"
+          >
+            <v-tab
+              v-for="category in rank_categories"
+              :key="category"
+            >
+              {{ category }}
+            </v-tab>
+          </v-tabs>
           <div class="scoreboard">
-            <v-data-table
-              :headers="headers"
-              :items="records"
-              :page.sync="page"
-              :items-per-page="itemsPerPage"
-              hide-default-footer
-              class="elevation-1"
-              :loading="isLoading"
-              loading-text="Loading... Please wait"
-              @page-count="pageCount = $event"
-              height="300"
-              fixed-header
-              disable-sort
-            />
+            <v-tabs-items v-model="current_rank_category_id">
+              <v-tab-item
+                v-for="category in rank_categories"
+                :key="category"
+              >
+                <v-data-table
+                  :headers="headers"
+                  :items="records"
+                  :page.sync="page"
+                  :items-per-page="items_per_page"
+                  hide-default-footer
+                  class="elevation-1"
+                  :loading="isLoading"
+                  loading-text="Loading... Please wait"
+                  @page-count="page_count = $event"
+                  height="300"
+                  fixed-header
+                  disable-sort
+                />
+              </v-tab-item>
+            </v-tabs-items>
             <div class="text-center pt-2">
               <v-pagination
                 v-model="page"
-                :length="pageCount"
+                :length="page_count"
               />
             </div>
           </div>
@@ -50,9 +67,9 @@ export default {
   data () {
     return {
       page: 1,
-      pageCount: 0,
-      itemsPerPage: 5,
-      isLoading:true,
+      page_count: 0,
+      items_per_page: 5,
+      is_loading:true,
       headers: [
         {
           text: 'Rank',
@@ -65,21 +82,25 @@ export default {
         { text: 'Solved', value: 'solved_amount' },
         { text: 'Last Point Time', value: 'last_point_at' }
       ],
+      rank_categories: ['All','School'],
+      current_rank_category_id: null,
       records: [],
       challenges:[]
     }
   },
+  watch:{
+    current_rank_category_id: function (new_category_id, old_category_id) {
+      this.genUserList(this.rank_categories[new_category_id])
+    }
+  },
   methods:{
-    async genUserList(){
-      let type = this.$route.params.type
-      var res;
-      if(!type){
-        res = await getScoreboardAPI()
-      }else if(type === 'stu'){
+    async genUserList(rank_category){
+      var res
+      this.isLoading = true
+      if (rank_category=='School'){
         res = await getStuScoreboardAPI()
       }else {
-        this.$router.push("/404")
-        return 
+        res = await getScoreboardAPI()
       }
       let records = res.data.players
       let challenges = res.data.challenges
@@ -102,9 +123,6 @@ export default {
       this.records = records
       this.isLoading = false
     }
-  },
-  created(){
-    this.genUserList()
   }
 }
 </script>
