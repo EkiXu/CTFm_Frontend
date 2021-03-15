@@ -33,7 +33,6 @@
                   :page.sync="page"
                   :items-per-page="items_per_page"
                   hide-default-footer
-                  class="elevation-1"
                   :loading="isLoading"
                   loading-text="Loading... Please wait"
                   @page-count="page_count = $event"
@@ -96,14 +95,31 @@ export default {
   methods:{
     async genUserList(rank_category){
       var res
-      this.isLoading = true
-      if (rank_category=='School'){
-        res = await getStuScoreboardAPI()
-      }else {
-        res = await getScoreboardAPI()
+      this.is_loading = true
+      try{
+        if (rank_category=='School'){
+          res = await getStuScoreboardAPI()
+        }else {
+          res = await getScoreboardAPI()
+        }
+      }catch{
+        this.is_loading = false
+        return
       }
       let records = res.data.players
       let challenges = res.data.challenges
+      this.headers = [
+        {
+          text: 'Rank',
+          align: 'start',
+          sortable: false,
+          value: 'rank'
+        },
+        { text: 'Nickname', value: 'nickname' },
+        { text: 'Points', value: 'points' },
+        { text: 'Solved', value: 'solved_amount' },
+        { text: 'Last Point Time', value: 'last_point_at' }
+      ]
       for(let challenge of challenges){
         this.headers.push({
           text: challenge.title,
@@ -127,7 +143,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.scoreboard{
-  
-}
+
 </style>

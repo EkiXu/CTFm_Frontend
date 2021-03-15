@@ -102,12 +102,17 @@ export default {
     async genTrend(type){
       this.loaded = false
       var res;
-      this.datacollection.datasets = []
-      if(this.type == 'School'){
-        res = await getStuTrendAPI()
-      }else {
-        res = await getTrendAPI()
+      try{
+        if(this.type == 'School'){
+          res = await getStuTrendAPI()
+        }else {
+          res = await getTrendAPI()
+        }
+      }catch{
+        this.loaded = true
+        return
       }
+      this.datacollection.datasets = []
       for(let i in res.data.rows){
         const user = res.data.rows[i]
         let records = user.records
@@ -176,7 +181,7 @@ export default {
     }
   }
   .rank_card__heading{
-    max-height: 285px;
+    min-height: 258px;
     position: relative;
     top: -20px;
     transition: .3s ease;
