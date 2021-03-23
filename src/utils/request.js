@@ -118,15 +118,7 @@ service.interceptors.response.use(
     if(error.toString().includes('timeout')) {
       error.message = 'Sorry Timeout!'
     }else if(error.response){
-      if(error.response.status == 401 || error.response.status == 403) {
-        error.message = 'Forbidden'
-        //store.dispatch('user/ClearUserState')
-        //directLogin()
-        //return 
-      }else if(error.response.status == 404){
-        direct404()
-        return 
-      }else if (error.response.data.detail) {
+      if (error.response.data.detail) {
         error.message = error.response.data.detail
       }else {
         var message
@@ -134,6 +126,16 @@ service.interceptors.response.use(
           message = key.toString()+error.response.data[key][0]
         }
         error.message = message
+      }
+      
+      if(error.response.status == 401 || error.response.status == 403) {
+        //error.message = error.response.detail
+        //store.dispatch('user/ClearUserState')
+        //directLogin() 
+        //console.log(Vue.$router.path)
+      }else if(error.response.status == 404){
+        direct404()
+        return 
       }
     }
     

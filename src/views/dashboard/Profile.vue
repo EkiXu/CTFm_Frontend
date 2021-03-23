@@ -182,10 +182,17 @@ export default {
     ...mapGetters('user', ['userInfo']) 
   },
   methods:{
-    ...mapActions('user', ['UpdateUserInfo']),
+    ...mapActions('user', ['UpdateUserInfo','ClearUserState']),
     async genUserInfo(){
-      const res = await getUserDetailByIDAPI(this.userInfo.id)
-      this.userProfile = res.data
+      try{
+        const res = await getUserDetailByIDAPI(this.userInfo.id)
+        this.userProfile = res.data
+      }catch(error){
+        if(error.response.status == 401 || error.response.status == 403){
+          this.ClearUserState()
+          this.$router.push({ name: 'login' })
+        }
+      }
     },
     async sendVerifyEmail(){
       const res = await sendVerifyEmailAPI({"email":this.userProfile.email})

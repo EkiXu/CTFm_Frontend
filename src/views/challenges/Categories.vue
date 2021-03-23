@@ -38,11 +38,17 @@ export default {
   methods:{
     ...mapActions('contest', ['SetCategoryList']),
     async genCategoryList(){
-      const res = await getCategoryListAPI()
-      this.categories = res.data
-      this.SetCategoryList(this.categories)
-      for(let i=0 ;i< this.categories.length ;i++){
-        this.categories[i].updated_at = moment(this.categories[i].updated_at,'YYYY-MM-DD HH:mm:ss').fromNow()
+      try{
+        const res = await getCategoryListAPI()
+        this.categories = res.data
+        this.SetCategoryList(this.categories)
+        for(let i=0 ;i< this.categories.length ;i++){
+          this.categories[i].updated_at = moment(this.categories[i].updated_at,'YYYY-MM-DD HH:mm:ss').fromNow()
+        }
+      }catch (error){
+        if(error.response.status == 401 || error.response.status == 403){
+          this.$router.push({ name: 'profile' })
+        }
       }
     }
   },
