@@ -116,18 +116,20 @@ export default {
         console.log(error)
         this.submitRecords.push([`> ✗ ${error.message}`])
       }
+      var records = document.getElementsByClassName('records')[0]
+      this.$nextTick(() => {
+        setTimeout(() => {
+          console.log(records.scrollHeight)
+          records.scrollTop = records.scrollHeight
+          console.log(records.scrollTop)
+        }, 200)
+		  })
     }
   },
   watch:{
     $route(to,from){
       this.getInfo()
     },
-    submitRecords() {
-		  this.$nextTick(() => {
-        var records = this.$refs.records
-        records.scrollTop = records.scrollHeight+72
-		  })
-	  }
   },
   created(){
     this.getInfo()

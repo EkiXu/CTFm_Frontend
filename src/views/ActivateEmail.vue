@@ -63,13 +63,15 @@ export default {
   },
   async beforeCreate(){
     const res = await activateAPI(this.$route.params.user_id,this.$route.params.token)
-    console.log(res)
     this.detail = res.data.detail
     if(res.status == 208){
       this.type ='warning'
     }else if(res.status == 200){
       this.type ='success'
     }else this.type = 'error'
+
+    if(!this.detail) this.detail = this.type
+
     setTimeout(() => {
       this.$router.push({ name: 'profile' })
     }, 2000);
