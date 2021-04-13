@@ -6,7 +6,7 @@
         src="../assets/logo2.png"
       >
     </div>
-    <h1>CTFm,A new CTF platform For All CTFer</h1>
+    <h1>CTFm, A new CTF platform For All CTFer</h1>
   </v-container>
 </template>
 
