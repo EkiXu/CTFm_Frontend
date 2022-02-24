@@ -11,6 +11,7 @@ export const user = {
       id:0,
       nickname: '',
       username: '',
+      team: null,
       is_staff:false,
       is_hidden:true,
       is_active:false,
@@ -39,6 +40,9 @@ export const user = {
     },
     setUserInfo (state, userInfo) {
       state.userInfo = userInfo
+    },
+    setUserTeam (state, team) {
+      state.userInfo.team = team
     },
     resetUserInfo (state, userInfo = {}) {
       state.userInfo = {
@@ -74,6 +78,9 @@ export const user = {
     },
     UpdateUserInfo({commit},userInfo){
       commit('resetUserInfo',userInfo)
+    },
+    UpdateUserTeam({commit},team){
+      commit('setUserTeam',team)
     },
     ClearUserState({commit}){
       commit('resetUserInfo',{})

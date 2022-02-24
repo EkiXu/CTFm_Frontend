@@ -104,6 +104,14 @@ const routes = [
         meta: {
           title: 'Profile'
         }
+      },
+      {
+        path: 'team',
+        component: () => import('@/views/dashboard/Team.vue'),
+        name: 'team',
+        meta: {
+          title: 'Team'
+        }
       }
     ]
   },

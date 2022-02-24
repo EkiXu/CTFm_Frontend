@@ -94,7 +94,7 @@
           <v-list-item
             v-for="subItem in dashboard"
             :key="subItem.title"
-            :to="subItem.herf"
+            :to="subItem.href"
           >
             <v-list-item-action>
               <v-icon v-text="subItem.icon" />
@@ -109,7 +109,7 @@
         <v-list-item
           v-for="subItem in menu"
           :key="subItem.title"
-          :to="subItem.herf"
+          :to="subItem.href"
         >
           <v-list-item-action>
             <v-icon v-text="subItem.icon" />
@@ -142,30 +142,35 @@ export default {
     menu:[
       {
         title:"Challenges",
-        herf:"/category",
+        href:"/category",
         icon:"mdi-flag"
       },
       {
         title:"Notification",
-        herf:"/notifications",
+        href:"/notifications",
         icon:"mdi-bell"
       },
       {
         title:"Scoreboard",
-        herf:"/scoreboard",
+        href:"/scoreboard",
         icon:"mdi-signal"
       },
       {
         title:"About",
-        herf:"/about",
+        href:"/about",
         icon:"mdi-bee-flower"
       },
     ],
     dashboard:[
       {
         title:"Profile",
-        herf:"/dashboard/profile",
+        href:"/dashboard/profile",
         icon:"mdi-account"
+      },
+      {
+        title:"Team",
+        href:"/dashboard/team",
+        icon:"mdi-account-group"
       }
     ]
   }),

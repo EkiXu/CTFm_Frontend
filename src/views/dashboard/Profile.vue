@@ -24,7 +24,7 @@
             ref="updateForm"
             lazy-validation
           >
-            <v-container class="py-0">
+            <v-container>
               <v-row>
                 <v-col
                   cols="12"
@@ -187,7 +187,14 @@ export default {
       try{
         const res = await getUserDetailByIDAPI(this.userInfo.id)
         this.userProfile = res.data
+        this.UpdateUserInfo({
+          id:this.userInfo.id,
+          nickname:this.userProfile.nickname,
+          username:this.userProfile.username,
+          team:this.userProfile.team,
+          })
       }catch(error){
+        console.log(error)
         if(error.response.status == 401 || error.response.status == 403){
           this.ClearUserState()
           this.$router.push({ name: 'login' })
