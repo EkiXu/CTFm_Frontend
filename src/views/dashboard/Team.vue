@@ -5,8 +5,33 @@
       <v-col cols="12" md="8">
         <BaseCard color="#03a9be">
           <template v-slot:heading>
-            <div class="display-2 font-weight-light">Team</div>
-            <div class="subtitle-1 font-weight-light">Create or Join A team</div>
+            <template v-if="userInfo.team == null">
+              <div class="display-2 font-weight-light">Team</div>
+              <div class="subtitle-1 font-weight-light">Create or Join A team</div>
+            </template>
+            <template v-else>
+                <v-row>
+                <v-col
+                  cols="2"
+                >
+                  <v-avatar
+                    
+                    size="72"
+                  >
+                    <img
+                      :src="teamProfile.avatar_url"
+                    >
+                  </v-avatar>
+                </v-col>
+                <v-col
+                  cols="10"
+                >
+                  <div class="display-2 font-weight-light">{{teamProfile.name}}</div>
+                  <div class="subtitle-1 font-weight-light">Points:{{teamProfile.points}}</div>
+                </v-col>
+              </v-row>
+
+            </template>
           </template>
 
           <v-data-table
@@ -108,6 +133,7 @@
                   <span>
                     Token:{{teamProfile.token}}
                   </span>
+                  <v-btn color="blue darken-1" text @click="dismissTeam">Dismiss</v-btn>
                 </template>
               </v-toolbar>
             </template>
@@ -127,7 +153,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import BaseCard from '@/components/BaseCard.vue'
-import {createTeamAPI,getTeamAPI,joinTeamAPI} from '@/api/team'
+import { createTeamAPI,getTeamAPI,joinTeamAPI, dismissTeamByIDAPI } from '@/api/team'
 export default {
   components: {
     BaseCard
@@ -197,8 +223,10 @@ export default {
     },
     async createTeam () {
       const res = await createTeamAPI(this.editedTeam)
+      console.log("createTeam result:",res)
       this.UpdateUserTeam(res.data.id)
-      this.closeCreateTeamDialog ()
+      this.closeCreateTeamDialog()
+      this.genTeamInfo()
     },
     async joinTeam() {
       const res = await joinTeamAPI(this.joinTeamInfo)
@@ -209,6 +237,25 @@ export default {
     async genTeamInfo(){
       const res = await getTeamAPI(this.userInfo.team)
       this.teamProfile = res.data 
+    },
+    async dismissTeam(){
+      const res = await dismissTeamByIDAPI(this.userInfo.team);
+      this.userInfo.team = null;
+      this.teamProfile = {
+        name:"",
+        token:"",
+        description:"",
+        avatar_url:"",
+        solved_amount:0,
+        leader:0,
+        member: [
+          {
+            id: 0,
+            nickname: "",
+            points:0,
+          }
+        ]
+      }
     }
   }
 }

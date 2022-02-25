@@ -22,3 +22,10 @@ export const joinTeamAPI = (data) => {
     data:data,
   })
 }
+
+export const dismissTeamByIDAPI = (id) => {
+  return service({
+    url:"/team/"+id+"/",
+    method:"delete",
+  })
+}

@@ -81,7 +81,7 @@ export default {
         { text: 'Solved', value: 'solved_amount' },
         { text: 'Last Point Time', value: 'last_point_at' }
       ],
-      rank_categories: ['All','School'],
+      rank_categories: ['Team','User'],
       current_rank_category_id: null,
       records: [],
       challenges:[]
