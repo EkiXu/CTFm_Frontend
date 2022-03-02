@@ -12,7 +12,9 @@
             <template v-else>
                 <v-row>
                 <v-col
-                  cols="2"
+                  cols="4"
+                  xs="6"
+                  md="2"
                 >
                   <v-avatar
                     
@@ -24,7 +26,9 @@
                   </v-avatar>
                 </v-col>
                 <v-col
-                  cols="10"
+                  cols="8"
+                  xs="6"
+                  md="10"
                 >
                   <div class="display-2 font-weight-light">{{teamProfile.name}}</div>
                   <div class="subtitle-1 font-weight-light">Points:{{teamProfile.points}}</div>
