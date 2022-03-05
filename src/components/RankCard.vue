@@ -26,7 +26,7 @@
 import moment from 'moment'
 import {mapGetters} from 'vuex'
 import TrendCard from '@/components/TrendCard'
-import {getTrendAPI,getStuTrendAPI} from '@/api/contest'
+import {getTrendAPI,getStuTrendAPI,getTeamTrendAPI} from '@/api/contest'
 export default {
   components: { TrendCard },
   name: 'RankCard',
@@ -105,6 +105,8 @@ export default {
       try{
         if(this.type == 'School'){
           res = await getStuTrendAPI()
+        }else if(this.type == "Team"){
+          res = await getTeamTrendAPI()
         }else {
           res = await getTrendAPI()
         }
@@ -114,15 +116,27 @@ export default {
       }
       this.datacollection.datasets = []
       for(let i in res.data.rows){
-        const user = res.data.rows[i]
-        let records = user.records
-        let row = {
-          label: user.nickname,
-          borderColor: this.colorset[i],
-          fill:false,
-          pointBackgroundColor:this.colorset[i],
-          data:[]
+        const each = res.data.rows[i]
+        let records = each.records
+        let row = {}
+        if(this.type == "Team"){
+          row = {
+            label: each.name,
+            borderColor: this.colorset[i],
+            fill:false,
+            pointBackgroundColor:this.colorset[i],
+            data:[]
+          }
+        }else {
+          row = {
+            label: each.nickname,
+            borderColor: this.colorset[i],
+            fill:false,
+            pointBackgroundColor:this.colorset[i],
+            data:[]
+          }
         }
+
         row.data.push({
             x: moment(this.contestInfo.start_time).format(this.timeFormat),
             y: 0
@@ -135,7 +149,7 @@ export default {
         }
         row.data.push({
             x: moment().isBefore(this.contestInfo.end_time) ? moment().format(this.timeFormat):moment(this.contestInfo.end_time).format(this.timeFormat),
-            y: user.current_points
+            y: each.current_points
         })
         this.datacollection.datasets.push(row)
       }

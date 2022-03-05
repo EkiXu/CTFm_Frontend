@@ -58,7 +58,7 @@
 <script>
 import moment from 'moment'
 import RankCard from '@/components/RankCard.vue'
-import { getScoreboardAPI,getStuScoreboardAPI } from '@/api/contest'
+import { getScoreboardAPI,getStuScoreboardAPI,getTeamScoreboardAPI } from '@/api/contest'
 export default {
   components: {
     RankCard
@@ -89,37 +89,64 @@ export default {
   },
   watch:{
     current_rank_category_id: function (new_category_id, old_category_id) {
-      this.genUserList(this.rank_categories[new_category_id])
+      this.genScoreboard(this.rank_categories[new_category_id])
     }
   },
   methods:{
-    async genUserList(rank_category){
+    async genScoreboard(rank_category){
       var res
       this.is_loading = true
       try{
         if (rank_category=='School'){
           res = await getStuScoreboardAPI()
-        }else {
+        }
+        if (rank_category=='Team'){
+          res = await getTeamScoreboardAPI()
+        }
+        else {
           res = await getScoreboardAPI()
         }
       }catch{
         this.is_loading = false
         return
       }
-      let records = res.data.players
+
       let challenges = res.data.challenges
-      this.headers = [
-        {
-          text: 'Rank',
-          align: 'start',
-          sortable: false,
-          value: 'rank'
-        },
-        { text: 'Nickname', value: 'nickname' },
-        { text: 'Points', value: 'points' },
-        { text: 'Solved', value: 'solved_amount' },
-        { text: 'Last Point Time', value: 'last_point_at' }
-      ]
+      
+      let records = []
+      let headers = []
+      if(rank_category == 'Team'){
+        records = res.data.teams
+        this.headers = [
+          {
+            text: 'Rank',
+            align: 'start',
+            sortable: false,
+            value: 'rank'
+          },
+          { text: 'Name', value: 'name' },
+          { text: 'Points', value: 'points' },
+          { text: 'Solved', value: 'solved_amount' },
+        ]
+
+      }else {
+        records = res.data.players
+
+        this.headers = [
+          {
+            text: 'Rank',
+            align: 'start',
+            sortable: false,
+            value: 'rank'
+          },
+          { text: 'Nickname', value: 'nickname' },
+          { text: 'Points', value: 'points' },
+          { text: 'Solved', value: 'solved_amount' },
+          { text: 'Last Point Time', value: 'last_point_at' }
+        ]
+      }
+      
+
       for(let challenge of challenges){
         this.headers.push({
           text: challenge.title,

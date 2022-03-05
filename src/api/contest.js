@@ -49,3 +49,25 @@ export const getStuScoreboardAPI = () => {
     method: 'get',
   })
 }
+
+
+// @Summary 获取队伍趋势
+// @Produce  application/json
+// @Router /contest/trend/ [get]
+export const getTeamTrendAPI = () => {
+  return service({
+    url: '/contest/trend/team/',
+    method: 'get',
+  })
+}
+
+
+// @Summary 获取队伍积分榜
+// @Produce  application/json
+// @Router /contest/scoreboard/ [get]
+export const getTeamScoreboardAPI = () => {
+  return service({
+    url: '/contest/scoreboard/team/',
+    method: 'get',
+  })
+}

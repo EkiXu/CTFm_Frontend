@@ -41,3 +41,32 @@ export const checkChallengeFlagByIDAPI = (data,id) => {
     data: data
   })
 }
+
+export const getChallengeContainerByIDAPI = (id) => {
+  return service({
+    url: '/challenge/'+id+'/env/',
+    method: 'get',
+  })
+}
+
+
+export const createChallengeContainerByIDAPI = (id) => {
+  return service({
+    url: '/challenge/'+id+'/env/',
+    method: 'post',
+  })
+}
+
+export const renewChallengeContainerByIDAPI = (id) => {
+  return service({
+    url: '/challenge/'+id+'/env/',
+    method: 'put',
+  })
+}
+
+export const deleteChallengeContainerByIDAPI = (id) => {
+  return service({
+    url: '/challenge/'+id+'/env/',
+    method: 'delete',
+  })
+}
