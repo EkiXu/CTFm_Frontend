@@ -137,7 +137,7 @@
                   <span>
                     Token:{{teamProfile.token}}
                   </span>
-                  <v-btn color="blue darken-1" text @click="dismissTeam">Dismiss</v-btn>
+                  <v-btn color="blue darken-1" text @click="dismissTeam">{{dismissText}}</v-btn>
                 </template>
               </v-toolbar>
             </template>
@@ -164,7 +164,6 @@ export default {
   },
   data() {
     return {
-
       createTeamDialog: false,
       joinTeamDialog: false,
       headers: [
@@ -192,6 +191,7 @@ export default {
       joinTeamInfo:{
         token:"",
       },
+      dismissText:"Dismiss",
       teamProfile: {
         name:"",
         token:"",
@@ -240,7 +240,10 @@ export default {
     },
     async genTeamInfo(){
       const res = await getTeamAPI(this.userInfo.team)
-      this.teamProfile = res.data 
+      this.teamProfile = res.data
+      if(this.teamProfile.leader != this.userInfo.id){
+        this.dismissText = "Leave"
+      }
     },
     async dismissTeam(){
       const res = await dismissTeamByIDAPI(this.userInfo.team);
