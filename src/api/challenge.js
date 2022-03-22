@@ -1,6 +1,6 @@
 import service from '@/utils/request'
 
-// @Summary 添加题目
+// @Summary 获取题目
 // @Produce  application/json
 // @Param data body {"name":"strings","description":"strings","category":"strings","points":500,"is_hidden":false}
 // @Router /challenges [post]

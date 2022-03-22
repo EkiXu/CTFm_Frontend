@@ -40,6 +40,19 @@
                   </v-alert>
                 </v-col>
                 <v-col
+                  cols="12"
+                  v-if="!this.userProfile.team"
+                >
+                  <v-alert
+                    dense
+                    outlined
+                    border="left"
+                    type="warning"
+                  >
+                    Create or Join A Team to Play the Game.
+                  </v-alert>
+                </v-col>
+                <v-col
                   :cols="userProfile.is_verified ? 12:8"
                 >
                   <v-text-field

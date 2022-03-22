@@ -10,7 +10,7 @@
           </a>
         </p>
         <div class="content_description">
-          <vue-markdown style="overflow-wrap: break-word;" :source="challenge.content" />
+          <vue-markdown style="overflow-wrap: break-word;" :source="challenge.content"/>
         </div>
       </div>
     </div>
@@ -18,7 +18,7 @@
       
       <div class="action_fab">
         <template v-if="challenge.has_dynamic_container">
-          <docker-button :url="this.challenge.attachment_url" :challenge_id="challenge.id"/>
+          <docker-button :url="challenge.attachment_url" :challenge_id="challenge.id" :container="container" @updateContainerInfo="updateContainerInfo" />
         </template>
         <template v-else>
           <attachment-button :url="this.challenge.attachment_url" />
@@ -55,7 +55,8 @@
 <script>
 import {
   getChallengeByIDAPI,
-  checkChallengeFlagByIDAPI
+  checkChallengeFlagByIDAPI,
+  getChallengeContainerByIDAPI
 } from "@/api/challenge";
 import AttachmentButton from "@/components/AttachmentButton.vue";
 import DockerButton from '@/components/DockerButton.vue';
@@ -73,13 +74,23 @@ export default {
         id: 0,
         points: 0,
         category: ""
+      },
+      container:{
+        address:"",
+        port:0,
+        protocol:"",
+        start_time:"",
+        timeout:10800,
+        status:0,
       }
     };
   },
   mounted() {
     try {
       document.getElementsByName("challenges_panel")[0].className += " hidden";
-    } catch (e) {}
+    } catch (e) {
+
+    }
   },
   beforeDestroy: function() {
     try {
@@ -91,6 +102,16 @@ export default {
     async getInfo() {
       const res = await getChallengeByIDAPI(this.$route.params.id);
       this.challenge = res.data;
+      if(this.challenge.has_dynamic_container){
+        const res = await getChallengeContainerByIDAPI(this.challenge.id)
+        if(res.status == 204){
+          this.container.status = 0
+        }else if(res.status ==200){
+          this.container =  res.data
+          this.container.status = 1
+          this.submitRecords.push([`> Your container listening at ${this.container.host}:${this.container.port}`])
+        }
+      }
     },
     async submitFlag() {
       let data = { flag: this.challenge.flag };
@@ -113,8 +134,18 @@ export default {
           records.scrollTop = records.scrollHeight;
         }, 200);
       });
-    }
+    },
+    updateContainerInfo(container){
+      console.log("update",container)
+      if(container.status == 0) {
+        this.submitRecords.push(["> Your container successfully closed"])
+      }else{
+        this.submitRecords.push([`> Your container listening at ${container.address}:${container.port}`])
+      }
+      this.container = container
+    },
   },
+
   watch: {
     $route(to, from) {
       this.getInfo();
