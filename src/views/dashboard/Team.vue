@@ -50,14 +50,14 @@
                 <v-toolbar-title>Team</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical />
                 <v-spacer />
-                <template v-if="userInfo.team == null">
+                <template v-if="userInfo.team == null || isLeader">
                   <v-dialog v-model="createTeamDialog" hide-overlay persistent>
                     <template  v-slot:activator="{ on, attrs }">
-                      <v-btn color="primary" dark v-bind="attrs" v-on="on">Create Team</v-btn>
+                      <v-btn color="primary" dark v-bind="attrs" v-on="on">{{teamFormTitle}}</v-btn>
                     </template>
                     <v-card>
                       <v-card-title>
-                        <span class="headline">Create Team</span>
+                        <span class="headline">{{teamFormTitle}}</span>
                       </v-card-title>
 
                       <v-card-text>
@@ -157,7 +157,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import BaseCard from '@/components/BaseCard.vue'
-import { createTeamAPI,getTeamAPI,joinTeamAPI, dismissTeamByIDAPI } from '@/api/team'
+import { createTeamAPI,updateTeamByIDAPI,getTeamByIDAPI,joinTeamAPI, dismissTeamByIDAPI } from '@/api/team'
 export default {
   components: {
     BaseCard
@@ -183,6 +183,7 @@ export default {
           value: 'points'
         },
       ],
+      isLeader:false,
       editedTeam: {
         name: "",
         description: "",
@@ -226,11 +227,18 @@ export default {
       this.joinTeamDialog = false
     },
     async createTeam () {
-      const res = await createTeamAPI(this.editedTeam)
-      console.log("createTeam result:",res)
-      this.UpdateUserTeam(res.data.id)
-      this.closeCreateTeamDialog()
-      this.genTeamInfo()
+      if(!this.userInfo.team){
+        const res = await createTeamAPI(this.editedTeam)
+        this.UpdateUserTeam(res.data.id)
+        this.closeCreateTeamDialog()
+        this.genTeamInfo()
+      }else{
+        const res = await updateTeamByIDAPI(this.editedTeam)
+        this.UpdateUserTeam(res.data.id)
+        this.closeCreateTeamDialog()
+        this.genTeamInfo()
+      }
+      this.isLeader = true
     },
     async joinTeam() {
       const res = await joinTeamAPI(this.joinTeamInfo)
@@ -239,10 +247,14 @@ export default {
       this.closeJoinTeamDialog()
     },
     async genTeamInfo(){
-      const res = await getTeamAPI(this.userInfo.team)
+      const res = await getTeamByIDAPI(this.userInfo.team)
       this.teamProfile = res.data
-      if(this.teamProfile.leader != this.userInfo.id){
+      this.isLeader = this.teamProfile.leader != this.userInfo.id
+      if(!this.isLeader){
         this.dismissText = "Leave"
+      }else{
+        this.dismissText = "Dismiss"
+        this.teamFormTitle = "Edit"
       }
     },
     async dismissTeam(){
