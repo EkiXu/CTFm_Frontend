@@ -249,7 +249,7 @@ export default {
     async genTeamInfo(){
       const res = await getTeamByIDAPI(this.userInfo.team)
       this.teamProfile = res.data
-      this.isLeader = this.teamProfile.leader != this.userInfo.id
+      this.isLeader = this.teamProfile.leader == this.userInfo.id
       if(!this.isLeader){
         this.dismissText = "Leave"
       }else{
