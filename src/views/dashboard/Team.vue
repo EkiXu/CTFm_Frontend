@@ -193,6 +193,7 @@ export default {
         token:"",
       },
       dismissText:"Dismiss",
+      teamFormTitle:"Create A Team",
       teamProfile: {
         name:"",
         token:"",
@@ -252,6 +253,7 @@ export default {
       this.isLeader = this.teamProfile.leader == this.userInfo.id
       if(!this.isLeader){
         this.dismissText = "Leave"
+        this.teamFormTitle = "Create A Team"
       }else{
         this.dismissText = "Dismiss"
         this.teamFormTitle = "Edit"
