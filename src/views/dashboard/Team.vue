@@ -223,7 +223,7 @@ export default {
         this.closeCreateTeamDialog()
         this.genTeamInfo()
       } else {
-        const res = await updateTeamByIDAPI(this.editedTeam)
+        const res = await updateTeamByIDAPI(this.userInfo.team,this.editedTeam)
         this.UpdateUserTeam(res.data.id)
         this.closeCreateTeamDialog()
         this.genTeamInfo()
