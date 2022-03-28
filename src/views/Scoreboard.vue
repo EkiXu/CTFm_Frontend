@@ -30,12 +30,12 @@
                 <v-data-table
                   :headers="headers"
                   :items="records"
-                  :page.sync="page"
+                  :options.sync="options"
+                  :server-items-length="page_count"
                   :items-per-page="items_per_page"
                   hide-default-footer
-                  :loading="isLoading"
+                  :loading="is_loading"
                   loading-text="Loading... Please wait"
-                  @page-count="page_count = $event"
                   height="300"
                   fixed-header
                   disable-sort
@@ -46,6 +46,7 @@
               <v-pagination
                 v-model="page"
                 :length="page_count"
+                @input="getPaginationPage"
               />
             </div>
           </div>
@@ -69,6 +70,7 @@ export default {
       page_count: 0,
       items_per_page: 5,
       is_loading:true,
+      options: {},
       headers: [
         {
           text: 'Rank',
@@ -89,34 +91,49 @@ export default {
   },
   watch:{
     current_rank_category_id: function (new_category_id, old_category_id) {
-      this.genScoreboard(this.rank_categories[new_category_id])
-    }
+      this.page = 1
+      let offset= (this.page-1)*this.items_per_page
+      let limit = this.items_per_page
+      this.records = []
+      this.genScoreboard(this.rank_categories[new_category_id],limit,offset)
+    },
+    options: {
+      handler () {
+        this.getPaginationPage()
+      },
+      deep: true,
+    },
   },
   methods:{
-    async genScoreboard(rank_category){
+    getPaginationPage(){
+      let offset= (this.page-1)*this.items_per_page
+      let limit = this.items_per_page
+      this.genScoreboard(this.rank_categories[this.current_rank_category_id],limit,offset)
+    },
+    async genScoreboard(rank_category,limit,offset){
       var res
       this.is_loading = true
       try{
         if (rank_category=='School'){
-          res = await getStuScoreboardAPI()
+          res = await getStuScoreboardAPI(offset,limit)
         }
         if (rank_category=='Team'){
-          res = await getTeamScoreboardAPI()
+          res = await getTeamScoreboardAPI(offset,limit)
         }
         else {
-          res = await getScoreboardAPI()
+          res = await getScoreboardAPI(offset,limit)
         }
       }catch{
-        this.is_loading = false
         return
       }
+
 
       let challenges = res.data.challenges
       
       let records = []
-      let headers = []
+      
       if(rank_category == 'Team'){
-        records = res.data.teams
+        records = res.data.results
         this.headers = [
           {
             text: 'Rank',
@@ -130,7 +147,7 @@ export default {
         ]
 
       }else {
-        records = res.data.players
+        records = res.data.results
 
         this.headers = [
           {
@@ -158,13 +175,15 @@ export default {
         })
       }
       for(let i in records){
-        records[i].rank = parseInt(i)+1
+        records[i].rank = offset+ parseInt(i)+1
         records[i].last_point_at = moment(records[i].last_point_at,'YYYY-MM-DD HH:mm:ss').fromNow()
         for(let solved_challenge of records[i].solved_challenges)
           records[i]["challenge_"+solved_challenge.challenge] = "🚩"
       }
       this.records = records
-      this.isLoading = false
+      this.page_count = parseInt(res.data.count / limit)
+      console.log(this.page_count)
+      this.is_loading = false
     }
   }
 }

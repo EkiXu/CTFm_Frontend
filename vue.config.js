@@ -23,7 +23,8 @@ module.exports = {
     },
     proxy: {
       [process.env.VUE_APP_BASE_API]: { 
-        target: 'http://192.168.182.128:28082',
+        //target: 'http://192.168.182.128:28082',
+        target: 'https://mrctf.fun',
         changeOrigin: true
       }
     }
