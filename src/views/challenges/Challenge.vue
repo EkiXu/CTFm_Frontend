@@ -25,7 +25,7 @@
         </template>
       </div>
       <div class="action_header">
-        <i class="mdi mdi-console" style="margin-right: 10px;" />submission console
+        <i class="mdi mdi-console" style="margin-right: 10px;" />{{console_title}}
       </div>
       <div class="action_form">
         <div style="padding: 20px 15px;">
@@ -60,11 +60,13 @@ import {
 } from "@/api/challenge";
 import AttachmentButton from "@/components/AttachmentButton.vue";
 import DockerButton from '@/components/DockerButton.vue';
+import moment from "moment";
 export default {
   components: { AttachmentButton,DockerButton },
   name: "Challenge",
   data() {
     return {
+      now:moment(),
       showCur: true,
       submitRecords: [["> Paste flag in the input below and press enter."]],
       challenge: {
@@ -139,19 +141,36 @@ export default {
       console.log("update",container)
       if(container.status == 0) {
         this.submitRecords.push(["> Your container successfully closed"])
+        this.console_title = "submission console"
+        this.container = undefined
       }else{
-        this.submitRecords.push([`> Your container listening at ${container.address}:${container.port}`])
+        this.submitRecords.push([`> Your container listening at ${container.host}:${container.port}`])
+        this.container = container
       }
-      this.container = container
     },
   },
-
+  computed:{
+    console_title(){
+      if(!this.container || !this.container.start_time){
+        return 'submission console'
+      }
+      else{
+        let prefix = `${this.container.host}:${this.container.port} `
+        return prefix + (this.container.timeout - this.now.diff(moment(this.container.start_time), 'seconds')) + 's'
+      }
+    }
+  },
   watch: {
     $route(to, from) {
       this.getInfo();
     }
   },
   created() {
+    const update = () => {
+      this.now = moment();
+      requestAnimationFrame(update);
+    };
+    update();
     this.getInfo();
   }
 };

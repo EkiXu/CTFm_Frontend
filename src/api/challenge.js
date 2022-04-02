@@ -60,7 +60,7 @@ export const createChallengeContainerByIDAPI = (id) => {
 export const renewChallengeContainerByIDAPI = (id) => {
   return service({
     url: '/challenge/'+id+'/env/',
-    method: 'put',
+    method: 'patch',
   })
 }
 
