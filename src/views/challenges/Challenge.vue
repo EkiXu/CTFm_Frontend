@@ -111,7 +111,11 @@ export default {
         }else if(res.status ==200){
           this.container =  res.data
           this.container.status = 1
-          this.submitRecords.push([`> Your container listening at ${this.container.host}:${this.container.port}`])
+          if(this.container.protocol == 2){
+            this.submitRecords.push([`> Your container listening at http://${this.container.host}:${this.container.port}`])
+          }else {
+            this.submitRecords.push([`> Your container listening at ${this.container.host}:${this.container.port}`])
+          }
         }
       }
     },
@@ -142,7 +146,7 @@ export default {
       if(container.status == 0) {
         this.submitRecords.push(["> Your container successfully closed"])
         this.console_title = "submission console"
-        this.container = undefined
+        this.container = {status:0}
       }else{
         this.submitRecords.push([`> Your container listening at ${container.host}:${container.port}`])
         this.container = container

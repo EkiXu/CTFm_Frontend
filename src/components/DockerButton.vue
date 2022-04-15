@@ -59,17 +59,14 @@ export default {
   methods: {
     async requestChallengeContainer(){
       const res = await createChallengeContainerByIDAPI(this.challenge_id);
-      console.log(res)
       this.$emit("updateContainerInfo",res.data)
     },
     async renewChallengeContainer(){
       const res = await renewChallengeContainerByIDAPI(this.challenge_id);
-      console.log(res)
       this.$emit("updateContainerInfo",res.data)
     },
     async deleteChallengeContainer(){
       const res = await deleteChallengeContainerByIDAPI(this.challenge_id);
-      console.log(res)
       this.$emit("updateContainerInfo",{status:0})
     }
   }
