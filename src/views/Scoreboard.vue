@@ -68,7 +68,7 @@ export default {
     return {
       page: 1,
       page_count: 0,
-      items_per_page: 5,
+      items_per_page: 10,
       is_loading:true,
       options: {},
       headers: [
