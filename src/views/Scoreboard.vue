@@ -36,7 +36,6 @@
                   hide-default-footer
                   :loading="is_loading"
                   loading-text="Loading... Please wait"
-                  height="300"
                   fixed-header
                   disable-sort
                 />
