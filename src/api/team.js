@@ -8,10 +8,18 @@ export const createTeamAPI = (data) => {
   })
 }
 
-export const getTeamAPI = (id) => {
+export const getTeamByIDAPI = (id) => {
   return service({
     url: '/team/'+id+'/',
     method: 'get',
+  })
+}
+
+export const updateTeamByIDAPI = (id,data) => {
+  return service({
+    url: '/team/'+id+'/',
+    method: 'put',
+    data:data
   })
 }
 

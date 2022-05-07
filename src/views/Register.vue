@@ -86,6 +86,7 @@
                 />
                 <v-row justify="center">
                   <vue-recaptcha
+                    ref="recaptcha"
                     @verify="recaptchaVerify"
                     @expired="recaptchaOnExpired"
                     :sitekey="sitekey"
@@ -189,6 +190,7 @@ export default {
           this.valid = false
           this.$vToastify.error(error.message)
           this.registerForm.recaptcha = ''
+          this.$refs.recaptcha.reset();
           return
         })
       }

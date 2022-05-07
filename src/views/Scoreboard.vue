@@ -30,13 +30,12 @@
                 <v-data-table
                   :headers="headers"
                   :items="records"
-                  :page.sync="page"
+                  :options.sync="options"
+                  :server-items-length="page_count"
                   :items-per-page="items_per_page"
                   hide-default-footer
-                  :loading="isLoading"
+                  :loading="is_loading"
                   loading-text="Loading... Please wait"
-                  @page-count="page_count = $event"
-                  height="300"
                   fixed-header
                   disable-sort
                 />
@@ -46,6 +45,7 @@
               <v-pagination
                 v-model="page"
                 :length="page_count"
+                @input="getPaginationPage"
               />
             </div>
           </div>
@@ -58,7 +58,7 @@
 <script>
 import moment from 'moment'
 import RankCard from '@/components/RankCard.vue'
-import { getScoreboardAPI,getStuScoreboardAPI } from '@/api/contest'
+import { getScoreboardAPI,getStuScoreboardAPI,getTeamScoreboardAPI } from '@/api/contest'
 export default {
   components: {
     RankCard
@@ -67,8 +67,9 @@ export default {
     return {
       page: 1,
       page_count: 0,
-      items_per_page: 5,
+      items_per_page: 10,
       is_loading:true,
+      options: {},
       headers: [
         {
           text: 'Rank',
@@ -89,37 +90,79 @@ export default {
   },
   watch:{
     current_rank_category_id: function (new_category_id, old_category_id) {
-      this.genUserList(this.rank_categories[new_category_id])
-    }
+      this.page = 1
+      let offset= (this.page-1)*this.items_per_page
+      let limit = this.items_per_page
+      this.records = []
+      this.genScoreboard(this.rank_categories[new_category_id],limit,offset)
+    },
+    options: {
+      handler () {
+        this.getPaginationPage()
+      },
+      deep: true,
+    },
   },
   methods:{
-    async genUserList(rank_category){
+    getPaginationPage(){
+      let offset= (this.page-1)*this.items_per_page
+      let limit = this.items_per_page
+      this.genScoreboard(this.rank_categories[this.current_rank_category_id],limit,offset)
+    },
+    async genScoreboard(rank_category,limit,offset){
       var res
       this.is_loading = true
       try{
         if (rank_category=='School'){
-          res = await getStuScoreboardAPI()
-        }else {
-          res = await getScoreboardAPI()
+          res = await getStuScoreboardAPI(offset,limit)
+        }
+        if (rank_category=='Team'){
+          res = await getTeamScoreboardAPI(offset,limit)
+        }
+        else {
+          res = await getScoreboardAPI(offset,limit)
         }
       }catch{
-        this.is_loading = false
         return
       }
-      let records = res.data.players
+
+
       let challenges = res.data.challenges
-      this.headers = [
-        {
-          text: 'Rank',
-          align: 'start',
-          sortable: false,
-          value: 'rank'
-        },
-        { text: 'Nickname', value: 'nickname' },
-        { text: 'Points', value: 'points' },
-        { text: 'Solved', value: 'solved_amount' },
-        { text: 'Last Point Time', value: 'last_point_at' }
-      ]
+      
+      let records = []
+      
+      if(rank_category == 'Team'){
+        records = res.data.results
+        this.headers = [
+          {
+            text: 'Rank',
+            align: 'start',
+            sortable: false,
+            value: 'rank'
+          },
+          { text: 'Name', value: 'name' },
+          { text: 'Points', value: 'points' },
+          { text: 'Solved', value: 'solved_amount' },
+        ]
+
+      }else {
+        records = res.data.results
+
+        this.headers = [
+          {
+            text: 'Rank',
+            align: 'start',
+            sortable: false,
+            value: 'rank'
+          },
+          { text: 'Nickname', value: 'nickname' },
+          { text: 'Points', value: 'points' },
+          { text: 'Solved', value: 'solved_amount' },
+          { text: 'Last Point Time', value: 'last_point_at' }
+        ]
+      }
+      
+
       for(let challenge of challenges){
         this.headers.push({
           text: challenge.title,
@@ -131,13 +174,15 @@ export default {
         })
       }
       for(let i in records){
-        records[i].rank = parseInt(i)+1
+        records[i].rank = offset+ parseInt(i)+1
         records[i].last_point_at = moment(records[i].last_point_at,'YYYY-MM-DD HH:mm:ss').fromNow()
         for(let solved_challenge of records[i].solved_challenges)
           records[i]["challenge_"+solved_challenge.challenge] = "🚩"
       }
       this.records = records
-      this.isLoading = false
+      this.page_count = parseInt(res.data.count / limit)
+      console.log(this.page_count)
+      this.is_loading = false
     }
   }
 }

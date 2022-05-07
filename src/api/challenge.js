@@ -1,6 +1,6 @@
 import service from '@/utils/request'
 
-// @Summary 添加题目
+// @Summary 获取题目
 // @Produce  application/json
 // @Param data body {"name":"strings","description":"strings","category":"strings","points":500,"is_hidden":false}
 // @Router /challenges [post]
@@ -39,5 +39,34 @@ export const checkChallengeFlagByIDAPI = (data,id) => {
     url: '/challenge/'+id+'/_checkFlag/',
     method: 'post',
     data: data
+  })
+}
+
+export const getChallengeContainerByIDAPI = (id) => {
+  return service({
+    url: '/challenge/'+id+'/env/',
+    method: 'get',
+  })
+}
+
+
+export const createChallengeContainerByIDAPI = (id) => {
+  return service({
+    url: '/challenge/'+id+'/env/',
+    method: 'post',
+  })
+}
+
+export const renewChallengeContainerByIDAPI = (id) => {
+  return service({
+    url: '/challenge/'+id+'/env/',
+    method: 'patch',
+  })
+}
+
+export const deleteChallengeContainerByIDAPI = (id) => {
+  return service({
+    url: '/challenge/'+id+'/env/',
+    method: 'delete',
   })
 }
