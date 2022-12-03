@@ -180,7 +180,7 @@ export default {
           records[i]["challenge_"+solved_challenge.challenge] = "🚩"
       }
       this.records = records
-      this.page_count = Math.floor(res.data.count / limits) + 1
+      this.page_count = Math.floor(res.data.count / this.items_per_page) + 1
       console.log(this.page_count)
       this.is_loading = false
     }
