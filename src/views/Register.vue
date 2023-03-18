@@ -84,7 +84,7 @@
                   v-model="registerForm.rePassword"
                   :rules="rules.rePasswordRules"
                 />
-                <v-row justify="center">
+                <v-row justify="center" v-if="sitekey">
                   <vue-recaptcha
                     ref="recaptcha"
                     @verify="recaptchaVerify"
@@ -116,13 +116,13 @@
 <script>
 import VueRecaptcha from 'vue-recaptcha';
 import { mapActions } from 'vuex'
-import { registerAPI } from '@/api/auth'
+import { registerAPI,recaptchaAPI } from '@/api/auth'
 export default {
   name: 'Register',
   components: { VueRecaptcha },
   data () {
     return {
-      sitekey: process.env.VUE_APP_RECAPTCHA_PUBLIC_KEY,
+      sitekey: '',
       isWaiting: false,
       registerForm: {
         email: '',
@@ -165,6 +165,19 @@ export default {
         ]
       }
     }
+  },
+  created(){
+    let res = recaptchaAPI()
+    res.then((res) => {
+      //console.log(res.data.api_key)
+      this.sitekey = res.data.api_key
+    }).catch(error => {
+      this.valid = false
+      this.$vToastify.error(error.message)
+      this.registerForm.recaptcha = ''
+      this.$refs.recaptcha.reset();
+      return
+    })
   },
   methods: {
     ...mapActions('user', ['LoginIn']),

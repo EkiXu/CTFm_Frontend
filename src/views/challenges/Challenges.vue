@@ -22,6 +22,7 @@
             :score="challenge.points"
             :id="challenge.id"
             :solved="challenge.solved"
+            :solved_amount="challenge.solved_amount"
           />
         </v-col>
       </v-container>

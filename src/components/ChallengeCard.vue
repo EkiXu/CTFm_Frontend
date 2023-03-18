@@ -13,6 +13,15 @@
           v-text="solved ? 'mdi-checkbox-marked-circle-outline':'mdi-checkbox-blank-circle-outline'"
         />
         <p class="score">
+          {{ solved_amount }}
+        </p>
+        <p class="points">
+          solved
+        </p>
+        <p class="score">
+          /
+        </p>
+        <p class="score">
           {{ score }}
         </p>
         <p class="points">
@@ -55,6 +64,10 @@ export default {
     solved: {
       type: Boolean,
       default: undefined
+    },
+    solved_amount:{
+      type:Number,
+      default:0,
     }
   },
   methods: {
@@ -74,21 +87,20 @@ export default {
   margin: 5px 20px;
   .score{
     font-size: 20px;
-    font-style: italic;
     font-weight: 700;
     text-shadow: 1px 1px 10px #FFFFFF;
     margin-right: 5px;
     color: #fff;
     font-weight: 400;
     line-height: 1.46429em;
-    margin: 0;
+    margin: 0 5px;
     display: block;
   }
   .points {
     font-size: 18px;
     color: #fff;
     font-weight: 400;
-    margin: 0 10px;
+    margin: 0 5px;
     line-height: 1.46429em;
   }
   &:hover{

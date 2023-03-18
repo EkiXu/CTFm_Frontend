@@ -78,3 +78,11 @@ export const registerAPI = (data) => {
     data: data
   })
 }
+
+// @Summary 热更新验证码客户端apikey
+export const recaptchaAPI = () => {
+  return service({
+    url: '/auth/recaptcha/',
+    method: 'get',
+  })
+}

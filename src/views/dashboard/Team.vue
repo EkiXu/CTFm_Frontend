@@ -11,11 +11,11 @@
             </template>
             <template v-else>
               <v-row>
-                <v-col cols="4" xs="6" md="2">
+                <!-- <v-col cols="4" xs="6" md="2">
                   <v-avatar size="72">
                     <img :src="teamProfile.avatar_url" />
                   </v-avatar>
-                </v-col>
+                </v-col> -->
                 <v-col cols="8" xs="6" md="10">
                   <div class="display-2 font-weight-light">{{ teamProfile.name }}</div>
                   <div class="subtitle-1 font-weight-light">Points:{{ teamProfile.points }}</div>
@@ -51,32 +51,11 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="6" sm="5" md="6">
+                          <v-col cols="12" sm="10" md="8">
                             <v-text-field
                               v-model="editedTeam.name"
                               label="Team Name"
                               prepend-icon="mdi-account-group"
-                            />
-                          </v-col>
-                          <v-col cols="6">
-                            <!--<v-file-input
-                                accept="image/png, image/jpeg, image/bmp"
-                                prepend-icon="mdi-camera"
-                                label="Avatar"
-                            ></v-file-input>-->
-                            <v-text-field
-                              v-model="editedTeam.avatar_url"
-                              label="Team Avatar"
-                              prepend-icon="mdi-camera"
-                            />
-                          </v-col>
-                          <v-col cols="12">
-                            <h2 style="padding-bottom:10px">Description</h2>
-                            <v-textarea
-                              v-model="editedTeam.description"
-                              auto-grow
-                              clearable
-                              clear-icon="mdi-close-circle"
                             />
                           </v-col>
                         </v-row>
@@ -175,8 +154,6 @@ export default {
       isLeader: false,
       editedTeam: {
         name: "",
-        description: "",
-        avatar_url: "",
       },
       joinTeamInfo: {
         token: "",
@@ -186,8 +163,6 @@ export default {
       teamProfile: {
         name: "",
         token: "",
-        description: "",
-        avatar_url: "",
         solved_amount: 0,
         leader: 0,
         member: [
@@ -241,8 +216,6 @@ export default {
       this.teamProfile = res.data
       this.editedTeam = {
         name: this.teamProfile.name,
-        description: this.teamProfile.description,
-        avatar_url: this.teamProfile.avatar_url,
       }
       this.isLeader = this.teamProfile.leader == this.userInfo.id
       if (!this.isLeader) {
@@ -259,8 +232,6 @@ export default {
       this.teamProfile = {
         name: "",
         token: "",
-        description: "",
-        avatar_url: "",
         solved_amount: 0,
         leader: 0,
         member: [
